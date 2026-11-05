@@ -29,9 +29,8 @@ export function layoutOf(doc: CaptureDoc): Layout {
   const cropW = Math.max(2, doc.width * doc.crop.w);
   const cropH = Math.max(2, doc.height * doc.crop.h);
   const pad = doc.style.padding;
-  const frame = frameOf(doc.style);
-  const tilt = Math.abs(frame.rotateX) + Math.abs(frame.rotateY) + Math.abs(frame.rotateZ);
-  const room = Math.ceil(doc.style.shadowBlur + Math.abs(doc.style.shadowY) + 24 + tilt * 2.4);
+  const gutter = Math.round(Math.max(cropW, cropH) * 0.4);
+  const room = Math.ceil(doc.style.shadowBlur + Math.abs(doc.style.shadowY) + gutter);
   const card = { x: room, y: room, w: cropW + pad * 2, h: cropH + pad * 2 };
   const radii = cornerRadii(doc.style.borderStyle, doc.style.radius, cropW, cropH);
   return {
@@ -149,29 +148,32 @@ function noiseSource() {
 function paintBackground(
   ctx: CanvasRenderingContext2D,
   doc: CaptureDoc,
-  card: Layout["card"],
-  background?: CanvasImageSource | null,
+  area: { x: number; y: number; w: number; h: number },
+  background: CanvasImageSource | null | undefined,
+  clip: boolean,
 ) {
   const { style } = doc;
   ctx.save();
-  traceRound(ctx, card.x, card.y, card.w, card.h, style.padding > 8 ? Math.max(22, style.radius) : style.radius);
-  ctx.clip();
+  if (clip) {
+    traceRound(ctx, area.x, area.y, area.w, area.h, style.padding > 8 ? Math.max(22, style.radius) : style.radius);
+    ctx.clip();
+  }
   if (style.blur > 0) ctx.filter = `blur(${style.blur}px)`;
   if (style.backgroundMode === "image" && background) {
-    ctx.drawImage(background, card.x - 20, card.y - 20, card.w + 40, card.h + 40);
+    ctx.drawImage(background, area.x, area.y, area.w, area.h);
   } else if (style.backgroundMode === "color") {
     ctx.fillStyle = style.backgroundColor;
-    ctx.fillRect(card.x - 20, card.y - 20, card.w + 40, card.h + 40);
+    ctx.fillRect(area.x, area.y, area.w, area.h);
   } else if (style.backgroundMode === "gradient") {
-    const gradient = ctx.createLinearGradient(card.x, card.y, card.x + card.w, card.y + card.h);
+    const gradient = ctx.createLinearGradient(area.x, area.y, area.x + area.w, area.y + area.h);
     gradient.addColorStop(0, style.backgroundColor);
     gradient.addColorStop(1, "#1c1c1e");
     ctx.fillStyle = gradient;
-    ctx.fillRect(card.x, card.y, card.w, card.h);
+    ctx.fillRect(area.x, area.y, area.w, area.h);
   } else {
     ctx.save();
-    ctx.translate(card.x - 20, card.y - 20);
-    paintWallpaper(ctx, style.wallpaper, card.w + 40, card.h + 40);
+    ctx.translate(area.x, area.y);
+    paintWallpaper(ctx, style.wallpaper, area.w, area.h);
     ctx.restore();
   }
   ctx.filter = "none";
@@ -182,11 +184,25 @@ function paintBackground(
     const pattern = ctx.createPattern(tile, "repeat");
     if (pattern) {
       ctx.fillStyle = pattern;
-      ctx.fillRect(card.x, card.y, card.w, card.h);
+      ctx.fillRect(area.x, area.y, area.w, area.h);
     }
     ctx.restore();
   }
   ctx.restore();
+}
+
+function placedImage(lay: Layout, frame: ReturnType<typeof frameOf>, zoom: number) {
+  const scale = frame.scale * zoom;
+  const w = lay.image.w * scale;
+  const h = lay.image.h * scale;
+  const dx = (frame.focusX / 100) * lay.image.w * 0.75;
+  const dy = (frame.focusY / 100) * lay.image.h * 0.75;
+  return {
+    x: lay.image.x + lay.image.w / 2 - w / 2 + dx,
+    y: lay.image.y + lay.image.h / 2 - h / 2 + dy,
+    w,
+    h,
+  };
 }
 
 function drawArrow(ctx: CanvasRenderingContext2D, x1: number, y1: number, x2: number, y2: number, stroke: number) {
@@ -319,13 +335,20 @@ export function renderComposition(
   },
 ) {
   const lay = layoutOf(doc);
+  const frame = frameOf(doc.style);
+  const placed = placedImage(lay, frame, options.zoom);
+  const perspective = Math.max(lay.card.w, lay.card.h) * 2.4;
   ctx.clearRect(0, 0, lay.width, lay.height);
-  const buffer = cardBuffer(lay.card.w, lay.card.h);
-  buffer.ctx.save();
-  buffer.ctx.translate(-lay.card.x, -lay.card.y);
-  paintCard(buffer.ctx, source, sourceWidth, sourceHeight, doc, lay, options);
-  buffer.ctx.restore();
-  drawProjectedCard(ctx, buffer.canvas, lay, doc);
+  paintBackground(ctx, doc, lay.card, options.background, true);
+
+  const buffer = cardBuffer(placed.w, placed.h);
+  paintCard(buffer.ctx, source, sourceWidth, sourceHeight, doc, lay, placed, options);
+  drawCardShadow(ctx, placed, doc, perspective);
+  drawQuad(
+    ctx,
+    buffer.canvas,
+    projectCard(placed.x, placed.y, placed.w, placed.h, frame.rotateX, frame.rotateY, frame.rotateZ, perspective),
+  );
   return lay;
 }
 
@@ -336,6 +359,7 @@ function paintCard(
   sourceHeight: number,
   doc: CaptureDoc,
   lay: Layout,
+  placed: { x: number; y: number; w: number; h: number },
   options: {
     zoom: number;
     caption: string | null;
@@ -345,63 +369,57 @@ function paintCard(
     background?: CanvasImageSource | null;
   },
 ) {
-  paintBackground(ctx, doc, lay.card, options.background);
-  const { image } = lay;
-  const frame = frameOf(doc.style);
+  const scale = placed.w / lay.image.w;
+  const local = { x: 0, y: 0, w: placed.w, h: placed.h };
+  const radii = lay.radii.map((radius) => radius * scale) as [number, number, number, number];
   ctx.save();
-  traceRound(ctx, image.x, image.y, image.w, image.h, lay.radii);
+  traceRound(ctx, 0, 0, placed.w, placed.h, radii);
   ctx.clip();
-  const ax = image.x + image.w * (0.5 + frame.focusX / 220);
-  const ay = image.y + image.h * (0.5 + frame.focusY / 220);
-  const contentScale = frame.scale * options.zoom;
-  ctx.translate(ax, ay);
-  ctx.scale(contentScale, contentScale);
-  ctx.translate(-ax, -ay);
   const sx = doc.crop.x * sourceWidth;
   const sy = doc.crop.y * sourceHeight;
   const sw = Math.max(1, doc.crop.w * sourceWidth);
   const sh = Math.max(1, doc.crop.h * sourceHeight);
-  ctx.drawImage(source, sx, sy, sw, sh, image.x, image.y, image.w, image.h);
-  drawAnnotations(ctx, doc, image, options.selectedId);
+  ctx.drawImage(source, sx, sy, sw, sh, 0, 0, placed.w, placed.h);
+  drawAnnotations(ctx, doc, local, options.selectedId);
   ctx.restore();
 
   if (doc.style.thickness > 0) {
     ctx.save();
     ctx.strokeStyle = doc.style.borderColor;
-    ctx.lineWidth = doc.style.thickness;
-    traceRound(ctx, image.x, image.y, image.w, image.h, lay.radii);
+    ctx.lineWidth = doc.style.thickness * scale;
+    traceRound(ctx, 0, 0, placed.w, placed.h, radii);
     ctx.stroke();
     ctx.restore();
   }
 
-  if (options.overlay) drawOverlay(ctx, options.overlay, image);
+  if (options.overlay) drawOverlay(ctx, options.overlay, local);
 
   if (options.caption) {
     ctx.save();
-    ctx.font = `600 28px "Segoe UI", system-ui, sans-serif`;
+    ctx.font = `600 ${Math.round(28 * scale)}px "Segoe UI", system-ui, sans-serif`;
     const text = options.caption;
     const width = ctx.measureText(text).width;
-    const pillW = width + 28;
-    const pillH = 40;
-    const x = lay.card.x + (lay.card.w - pillW) / 2;
-    const y = lay.card.y + lay.card.h - pillH - 22;
-    traceRound(ctx, x, y, pillW, pillH, 20);
+    const pillW = width + 28 * scale;
+    const pillH = 40 * scale;
+    const x = (placed.w - pillW) / 2;
+    const y = placed.h - pillH - 22 * scale;
+    traceRound(ctx, x, y, pillW, pillH, 20 * scale);
     ctx.fillStyle = "rgba(255,255,255,0.94)";
     ctx.fill();
     ctx.fillStyle = "#1c1c1e";
-    ctx.fillText(text, x + 14, y + 27);
+    ctx.fillText(text, x + 14 * scale, y + 27 * scale);
     ctx.restore();
   }
 
   if (options.showCrop) {
     ctx.save();
     ctx.strokeStyle = "#0a84ff";
-    ctx.lineWidth = 1.5;
-    ctx.strokeRect(image.x, image.y, image.w, image.h);
+    ctx.lineWidth = 1.5 * scale;
+    ctx.strokeRect(0, 0, placed.w, placed.h);
     ctx.fillStyle = "#fff";
-    for (const point of cropHandles(image)) {
+    for (const point of cropHandles(local)) {
       ctx.beginPath();
-      ctx.arc(point.x, point.y, 6, 0, Math.PI * 2);
+      ctx.arc(point.x, point.y, 6 * scale, 0, Math.PI * 2);
       ctx.fill();
       ctx.stroke();
     }
@@ -443,23 +461,35 @@ let cardCanvas: HTMLCanvasElement | null = null;
 
 function cardBuffer(width: number, height: number) {
   if (!cardCanvas) cardCanvas = document.createElement("canvas");
+  return prepareBuffer(cardCanvas, width, height);
+}
+
+function prepareBuffer(canvas: HTMLCanvasElement, width: number, height: number) {
   const safeW = Math.max(1, Math.round(width));
   const safeH = Math.max(1, Math.round(height));
-  if (cardCanvas.width !== safeW || cardCanvas.height !== safeH) {
-    cardCanvas.width = safeW;
-    cardCanvas.height = safeH;
+  if (canvas.width !== safeW || canvas.height !== safeH) {
+    canvas.width = safeW;
+    canvas.height = safeH;
   }
-  const ctx = cardCanvas.getContext("2d");
+  const ctx = canvas.getContext("2d");
   if (!ctx) throw new Error("Could not draw the capture.");
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.clearRect(0, 0, safeW, safeH);
-  return { canvas: cardCanvas, ctx };
+  return { canvas, ctx };
 }
 
-function projectCard(x: number, y: number, w: number, h: number, rx: number, ry: number, rz: number): Point[] {
+function projectCard(
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  rx: number,
+  ry: number,
+  rz: number,
+  perspective: number,
+): Point[] {
   const cx = x + w / 2;
   const cy = y + h / 2;
-  const perspective = Math.max(w, h) * 2.4;
   const ax = (rx * Math.PI) / 180;
   const ay = (ry * Math.PI) / 180;
   const az = (rz * Math.PI) / 180;
@@ -480,10 +510,23 @@ function projectCard(x: number, y: number, w: number, h: number, rx: number, ry:
   });
 }
 
-function drawProjectedCard(ctx: CanvasRenderingContext2D, source: HTMLCanvasElement, lay: Layout, doc: CaptureDoc) {
+function drawCardShadow(
+  ctx: CanvasRenderingContext2D,
+  rect: { x: number; y: number; w: number; h: number },
+  doc: CaptureDoc,
+  perspective: number,
+) {
   const frame = frameOf(doc.style);
-  const quad = projectCard(lay.card.x, lay.card.y, lay.card.w, lay.card.h, frame.rotateX, frame.rotateY, frame.rotateZ);
-  const [tl, tr, br, bl] = quad;
+  const [tl, tr, br, bl] = projectCard(
+    rect.x,
+    rect.y,
+    rect.w,
+    rect.h,
+    frame.rotateX,
+    frame.rotateY,
+    frame.rotateZ,
+    perspective,
+  );
   ctx.save();
   ctx.filter = doc.style.shadowBlur > 0 ? `blur(${doc.style.shadowBlur}px)` : "none";
   ctx.fillStyle = `rgba(28, 32, 40, ${doc.style.shadowOpacity / 100})`;
@@ -495,10 +538,17 @@ function drawProjectedCard(ctx: CanvasRenderingContext2D, source: HTMLCanvasElem
   ctx.closePath();
   ctx.fill();
   ctx.restore();
+}
 
-  const flat = Math.abs(frame.rotateX) + Math.abs(frame.rotateY) + Math.abs(frame.rotateZ) < 0.4;
+function drawQuad(ctx: CanvasRenderingContext2D, source: HTMLCanvasElement, quad: Point[]) {
+  const [tl, tr, br, bl] = quad;
+  const flat =
+    Math.abs(tl.x - bl.x) < 0.4 &&
+    Math.abs(tr.x - br.x) < 0.4 &&
+    Math.abs(tl.y - tr.y) < 0.4 &&
+    Math.abs(bl.y - br.y) < 0.4;
   if (flat) {
-    ctx.drawImage(source, lay.card.x, lay.card.y);
+    ctx.drawImage(source, tl.x, tl.y);
     return;
   }
   const strips = 56;
@@ -530,9 +580,22 @@ function mix(from: Point, to: Point, t: number): Point {
 
 export function flattenPoint(doc: CaptureDoc, x: number, y: number) {
   const frame = frameOf(doc.style);
-  if (Math.abs(frame.rotateX) + Math.abs(frame.rotateY) + Math.abs(frame.rotateZ) < 0.4) return { x, y };
   const lay = layoutOf(doc);
-  const [tl, tr, br, bl] = projectCard(lay.card.x, lay.card.y, lay.card.w, lay.card.h, frame.rotateX, frame.rotateY, frame.rotateZ);
+  const placed = placedImage(lay, frame, 1);
+  if (Math.abs(frame.rotateX) + Math.abs(frame.rotateY) + Math.abs(frame.rotateZ) < 0.4) {
+    return mapPlacedToImage(lay, placed, x, y);
+  }
+  const perspective = Math.max(lay.card.w, lay.card.h) * 2.4;
+  const [tl, tr, br, bl] = projectCard(
+    placed.x,
+    placed.y,
+    placed.w,
+    placed.h,
+    frame.rotateX,
+    frame.rotateY,
+    frame.rotateZ,
+    perspective,
+  );
   let u = 0.5;
   let v = 0.5;
   for (let step = 0; step < 10; step += 1) {
@@ -548,7 +611,19 @@ export function flattenPoint(doc: CaptureDoc, x: number, y: number) {
     u = Math.min(1, Math.max(0, u + (dx * dv.y - dy * dv.x) / det));
     v = Math.min(1, Math.max(0, v + (du.x * dy - du.y * dx) / det));
   }
-  return { x: lay.card.x + u * lay.card.w, y: lay.card.y + v * lay.card.h };
+  return mapPlacedToImage(lay, placed, placed.x + u * placed.w, placed.y + v * placed.h);
+}
+
+function mapPlacedToImage(
+  lay: Layout,
+  placed: { x: number; y: number; w: number; h: number },
+  x: number,
+  y: number,
+) {
+  return {
+    x: lay.image.x + ((x - placed.x) / placed.w) * lay.image.w,
+    y: lay.image.y + ((y - placed.y) / placed.h) * lay.image.h,
+  };
 }
 
 export type CropEdge = "n" | "s" | "e" | "w" | "nw" | "ne" | "sw" | "se" | "move";
