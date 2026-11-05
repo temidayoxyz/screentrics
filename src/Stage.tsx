@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import {
+  flattenPoint,
   hitCropHandle,
   hitTest,
   layoutOf,
@@ -34,6 +35,7 @@ type StageProps = {
   playhead: number;
   zoom: number;
   caption: string | null;
+  overlay: HTMLImageElement | null;
   cropMode: boolean;
   selectedId: string | null;
   onSelect: (id: string | null) => void;
@@ -53,6 +55,7 @@ export default function Stage({
   playhead,
   zoom,
   caption,
+  overlay,
   cropMode,
   selectedId,
   onSelect,
@@ -88,6 +91,7 @@ export default function Stage({
       renderComposition(ctx, image, image.naturalWidth, image.naturalHeight, current, {
         zoom: mode === "motion" ? zoom : 1,
         caption: mode === "motion" ? caption : null,
+        overlay: mode === "motion" ? overlay : null,
         selectedId: mode === "static" ? selectedId : null,
         showCrop: cropMode && mode === "static",
         background,
@@ -97,17 +101,14 @@ export default function Stage({
     const observer = new ResizeObserver(draw);
     observer.observe(frame);
     return () => observer.disconnect();
-  }, [image, background, doc, mode, zoom, caption, cropMode, selectedId, playhead]);
+  }, [image, background, doc, mode, zoom, caption, overlay, cropMode, selectedId, playhead]);
 
   function compositionPoint(event: React.PointerEvent<HTMLCanvasElement>) {
     const canvas = canvasRef.current;
     if (!canvas) return null;
     const lay = layoutOf(docRef.current);
     const rect = canvas.getBoundingClientRect();
-    return {
-      x: ((event.clientX - rect.left) / rect.width) * lay.width,
-      y: ((event.clientY - rect.top) / rect.height) * lay.height,
-    };
+    return flattenPoint(docRef.current, ((event.clientX - rect.left) / rect.width) * lay.width, ((event.clientY - rect.top) / rect.height) * lay.height);
   }
 
   function updateAnnotation(id: string, recipe: (mark: Annotation) => Annotation) {

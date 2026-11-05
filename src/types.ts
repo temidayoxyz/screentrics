@@ -31,10 +31,24 @@ export type CaptureStyle = {
   shadowBlur: number;
   shadowY: number;
   shadowOpacity: number;
+  scale: number;
+  focusX: number;
+  focusY: number;
+  rotateX: number;
+  rotateY: number;
+  rotateZ: number;
 };
 
 export type ZoomClip = { id: string; start: number; end: number; scale: number };
 export type TextClip = { id: string; start: number; end: number; text: string };
+export type ImageClip = { id: string; start: number; end: number; src: string };
+
+export type Motion = {
+  duration: number;
+  zooms: ZoomClip[];
+  texts: TextClip[];
+  images: ImageClip[];
+};
 
 export type Crop = { x: number; y: number; w: number; h: number };
 
@@ -47,7 +61,7 @@ export type CaptureDoc = {
   style: CaptureStyle;
   annotations: Annotation[];
   crop: Crop;
-  motion: { duration: number; zooms: ZoomClip[]; texts: TextClip[] };
+  motion: Motion;
 };
 
 export type Captured = { id: string; width: number; height: number; thumb: string };
@@ -84,6 +98,26 @@ export function defaultStyle(): CaptureStyle {
     shadowBlur: 36,
     shadowY: 18,
     shadowOpacity: 22,
+    scale: 1,
+    focusX: 0,
+    focusY: 0,
+    rotateX: 0,
+    rotateY: 0,
+    rotateZ: 0,
+  };
+}
+
+export function frameOf(style: Partial<CaptureStyle>) {
+  const base = defaultStyle();
+  const clamp = (value: number | undefined, fallback: number, min: number, max: number) =>
+    Math.min(max, Math.max(min, value ?? fallback));
+  return {
+    scale: clamp(style.scale, base.scale, 1, 3),
+    focusX: clamp(style.focusX, 0, -100, 100),
+    focusY: clamp(style.focusY, 0, -100, 100),
+    rotateX: clamp(style.rotateX, 0, -60, 60),
+    rotateY: clamp(style.rotateY, 0, -60, 60),
+    rotateZ: clamp(style.rotateZ, 0, -60, 60),
   };
 }
 
@@ -97,7 +131,7 @@ export function createDoc(captured: Captured, title: string): CaptureDoc {
     style: defaultStyle(),
     annotations: [],
     crop: { x: 0, y: 0, w: 1, h: 1 },
-    motion: { duration: 5, zooms: [], texts: [] },
+    motion: { duration: 5, zooms: [], texts: [], images: [] },
   };
 }
 
@@ -112,6 +146,15 @@ export function isDoc(value: unknown): value is CaptureDoc {
     !!doc.crop &&
     !!doc.motion
   );
+}
+
+export function motionOf(motion: Partial<Motion> | undefined): Motion {
+  return {
+    duration: motion?.duration ?? 5,
+    zooms: motion?.zooms ?? [],
+    texts: motion?.texts ?? [],
+    images: motion?.images ?? [],
+  };
 }
 
 export function formatTime(seconds: number) {

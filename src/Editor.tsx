@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Inspector from "./Inspector";
 import Stage from "./Stage";
 import Timeline from "./Timeline";
-import { captionAt, layoutOf, renderComposition, zoomAt } from "./render";
+import { captionAt, layoutOf, overlayAt, renderComposition, zoomAt } from "./render";
 import type { Annotation, CaptureDoc, CaptureStyle, Tool } from "./types";
 import { messageOf } from "./types";
 import { invoke } from "@tauri-apps/api/core";
@@ -38,6 +38,8 @@ export default function Editor({ doc, onChange, onBack, onDelete, onNotice }: Ed
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [editingText, setEditingText] = useState<string | null>(null);
   const [playhead, setPlayhead] = useState(0);
+  const overlaySrc = mode === "motion" ? overlayAt(doc, playhead) : null;
+  const overlay = useLoadedImage(overlaySrc);
   const [playing, setPlaying] = useState(false);
   const [exporting, setExporting] = useState(false);
   const [menu, setMenu] = useState(false);
@@ -164,6 +166,7 @@ export default function Editor({ doc, onChange, onBack, onDelete, onNotice }: Ed
       renderComposition(ctx, image, image.naturalWidth, image.naturalHeight, doc, {
         zoom: mode === "motion" ? zoomAt(doc, playhead) : 1,
         caption: mode === "motion" ? captionAt(doc, playhead) : null,
+        overlay: mode === "motion" ? overlay : null,
         selectedId: null,
         showCrop: false,
         background,
@@ -207,14 +210,23 @@ export default function Editor({ doc, onChange, onBack, onDelete, onNotice }: Ed
       const stopped = new Promise<void>((resolve) => {
         recorder.onstop = () => resolve();
       });
+      const overlays = new Map<string, HTMLImageElement>();
+      await Promise.all(
+        (doc.motion.images ?? []).map(async (clip) => {
+          if (overlays.has(clip.src)) return;
+          overlays.set(clip.src, await loadImage(clip.src));
+        }),
+      );
       recorder.start();
       const frames = Math.max(1, Math.round(doc.motion.duration * 30));
       for (let frame = 0; frame < frames; frame += 1) {
         const time = frame / 30;
+        const src = overlayAt(doc, time);
         ctx.setTransform(scale, 0, 0, scale, 0, 0);
         renderComposition(ctx, image, image.naturalWidth, image.naturalHeight, doc, {
           zoom: zoomAt(doc, time),
           caption: captionAt(doc, time),
+          overlay: src ? overlays.get(src) ?? null : null,
           selectedId: null,
           showCrop: false,
           background,
@@ -311,6 +323,7 @@ export default function Editor({ doc, onChange, onBack, onDelete, onNotice }: Ed
         playhead={playhead}
         zoom={zoomAt(doc, playhead)}
         caption={captionAt(doc, playhead)}
+        overlay={overlay}
         cropMode={cropMode}
         selectedId={selectedId}
         onSelect={setSelectedId}
@@ -336,7 +349,7 @@ export default function Editor({ doc, onChange, onBack, onDelete, onNotice }: Ed
           }}
         />
       )}
-      <Inspector doc={doc} onStyle={setStyle} onImage={useBackgroundFile} />
+      <Inspector doc={doc} image={image} onStyle={setStyle} onImage={useBackgroundFile} />
       {mode === "static" ? (
         <div className="mark-bar">
           {TOOLS.map((item) => (
@@ -419,6 +432,35 @@ function fileName(title: string, extension: string) {
 
 function wait(ms: number) {
   return new Promise((resolve) => window.setTimeout(resolve, ms));
+}
+
+function loadImage(src: string) {
+  return new Promise<HTMLImageElement>((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error("Could not read the image."));
+    img.src = src;
+  });
+}
+
+function useLoadedImage(src: string | null) {
+  const [image, setImage] = useState<HTMLImageElement | null>(null);
+  useEffect(() => {
+    if (!src) {
+      setImage(null);
+      return;
+    }
+    let cancel = false;
+    loadImage(src).then((img) => {
+      if (!cancel) setImage(img);
+    }).catch(() => {
+      if (!cancel) setImage(null);
+    });
+    return () => {
+      cancel = true;
+    };
+  }, [src]);
+  return image;
 }
 
 function blobToBase64(blob: Blob) {

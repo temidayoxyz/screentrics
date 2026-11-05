@@ -1,4 +1,4 @@
-import type { Annotation, CaptureDoc, Crop } from "./types";
+import { frameOf, type Annotation, type CaptureDoc, type Crop } from "./types";
 
 export type Layout = {
   width: number;
@@ -29,7 +29,9 @@ export function layoutOf(doc: CaptureDoc): Layout {
   const cropW = Math.max(2, doc.width * doc.crop.w);
   const cropH = Math.max(2, doc.height * doc.crop.h);
   const pad = doc.style.padding;
-  const room = Math.ceil(doc.style.shadowBlur + Math.abs(doc.style.shadowY) + 20);
+  const frame = frameOf(doc.style);
+  const tilt = Math.abs(frame.rotateX) + Math.abs(frame.rotateY) + Math.abs(frame.rotateZ);
+  const room = Math.ceil(doc.style.shadowBlur + Math.abs(doc.style.shadowY) + 24 + tilt * 2.4);
   const card = { x: room, y: room, w: cropW + pad * 2, h: cropH + pad * 2 };
   const radii = cornerRadii(doc.style.borderStyle, doc.style.radius, cropW, cropH);
   return {
@@ -58,6 +60,10 @@ export function zoomAt(doc: CaptureDoc, time: number) {
 
 export function captionAt(doc: CaptureDoc, time: number) {
   return doc.motion.texts.find((item) => time >= item.start && time <= item.end)?.text ?? null;
+}
+
+export function overlayAt(doc: CaptureDoc, time: number) {
+  return doc.motion.images?.find((item) => time >= item.start && time <= item.end)?.src ?? null;
 }
 
 function traceRound(
@@ -306,6 +312,7 @@ export function renderComposition(
   options: {
     zoom: number;
     caption: string | null;
+    overlay?: HTMLImageElement | null;
     selectedId: string | null;
     showCrop: boolean;
     background?: CanvasImageSource | null;
@@ -313,25 +320,43 @@ export function renderComposition(
 ) {
   const lay = layoutOf(doc);
   ctx.clearRect(0, 0, lay.width, lay.height);
+  const buffer = cardBuffer(lay.card.w, lay.card.h);
+  buffer.ctx.save();
+  buffer.ctx.translate(-lay.card.x, -lay.card.y);
+  paintCard(buffer.ctx, source, sourceWidth, sourceHeight, doc, lay, options);
+  buffer.ctx.restore();
+  drawProjectedCard(ctx, buffer.canvas, lay, doc);
+  return lay;
+}
+
+function paintCard(
+  ctx: CanvasRenderingContext2D,
+  source: CanvasImageSource,
+  sourceWidth: number,
+  sourceHeight: number,
+  doc: CaptureDoc,
+  lay: Layout,
+  options: {
+    zoom: number;
+    caption: string | null;
+    overlay?: HTMLImageElement | null;
+    selectedId: string | null;
+    showCrop: boolean;
+    background?: CanvasImageSource | null;
+  },
+) {
   paintBackground(ctx, doc, lay.card, options.background);
   const { image } = lay;
-  ctx.save();
-  ctx.shadowColor = `rgba(28, 32, 40, ${doc.style.shadowOpacity / 100})`;
-  ctx.shadowBlur = doc.style.shadowBlur;
-  ctx.shadowOffsetY = doc.style.shadowY;
-  traceRound(ctx, image.x, image.y, image.w, image.h, lay.radii);
-  ctx.fillStyle = "#fff";
-  ctx.fill();
-  ctx.restore();
-
+  const frame = frameOf(doc.style);
   ctx.save();
   traceRound(ctx, image.x, image.y, image.w, image.h, lay.radii);
   ctx.clip();
-  const cx = image.x + image.w / 2;
-  const cy = image.y + image.h / 2;
-  ctx.translate(cx, cy);
-  ctx.scale(options.zoom, options.zoom);
-  ctx.translate(-cx, -cy);
+  const ax = image.x + image.w * (0.5 + frame.focusX / 220);
+  const ay = image.y + image.h * (0.5 + frame.focusY / 220);
+  const contentScale = frame.scale * options.zoom;
+  ctx.translate(ax, ay);
+  ctx.scale(contentScale, contentScale);
+  ctx.translate(-ax, -ay);
   const sx = doc.crop.x * sourceWidth;
   const sy = doc.crop.y * sourceHeight;
   const sw = Math.max(1, doc.crop.w * sourceWidth);
@@ -348,6 +373,8 @@ export function renderComposition(
     ctx.stroke();
     ctx.restore();
   }
+
+  if (options.overlay) drawOverlay(ctx, options.overlay, image);
 
   if (options.caption) {
     ctx.save();
@@ -380,7 +407,148 @@ export function renderComposition(
     }
     ctx.restore();
   }
-  return lay;
+}
+
+function drawOverlay(
+  ctx: CanvasRenderingContext2D,
+  source: HTMLImageElement,
+  image: { x: number; y: number; w: number; h: number },
+) {
+  const width = source.naturalWidth || source.width;
+  const height = source.naturalHeight || source.height;
+  if (!width || !height) return;
+  const maxW = image.w * 0.28;
+  const maxH = image.h * 0.34;
+  const fit = Math.min(maxW / width, maxH / height);
+  const w = width * fit;
+  const h = height * fit;
+  const x = image.x + image.w - w - image.w * 0.04;
+  const y = image.y + image.h - h - image.h * 0.06;
+  ctx.save();
+  ctx.shadowColor = "rgba(0,0,0,0.28)";
+  ctx.shadowBlur = 18;
+  ctx.shadowOffsetY = 8;
+  traceRound(ctx, x, y, w, h, 12);
+  ctx.fillStyle = "#fff";
+  ctx.fill();
+  ctx.shadowColor = "transparent";
+  ctx.clip();
+  ctx.drawImage(source, x, y, w, h);
+  ctx.restore();
+}
+
+type Point = { x: number; y: number };
+
+let cardCanvas: HTMLCanvasElement | null = null;
+
+function cardBuffer(width: number, height: number) {
+  if (!cardCanvas) cardCanvas = document.createElement("canvas");
+  const safeW = Math.max(1, Math.round(width));
+  const safeH = Math.max(1, Math.round(height));
+  if (cardCanvas.width !== safeW || cardCanvas.height !== safeH) {
+    cardCanvas.width = safeW;
+    cardCanvas.height = safeH;
+  }
+  const ctx = cardCanvas.getContext("2d");
+  if (!ctx) throw new Error("Could not draw the capture.");
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.clearRect(0, 0, safeW, safeH);
+  return { canvas: cardCanvas, ctx };
+}
+
+function projectCard(x: number, y: number, w: number, h: number, rx: number, ry: number, rz: number): Point[] {
+  const cx = x + w / 2;
+  const cy = y + h / 2;
+  const perspective = Math.max(w, h) * 2.4;
+  const ax = (rx * Math.PI) / 180;
+  const ay = (ry * Math.PI) / 180;
+  const az = (rz * Math.PI) / 180;
+  return [
+    [-w / 2, -h / 2],
+    [w / 2, -h / 2],
+    [w / 2, h / 2],
+    [-w / 2, h / 2],
+  ].map(([px, py]) => {
+    const x1 = px * Math.cos(az) - py * Math.sin(az);
+    const y1 = px * Math.sin(az) + py * Math.cos(az);
+    const y2 = y1 * Math.cos(ax);
+    const z2 = y1 * Math.sin(ax);
+    const x3 = z2 * Math.sin(ay) + x1 * Math.cos(ay);
+    const z3 = z2 * Math.cos(ay) - x1 * Math.sin(ay);
+    const depth = perspective / Math.max(80, perspective + z3);
+    return { x: cx + x3 * depth, y: cy + y2 * depth };
+  });
+}
+
+function drawProjectedCard(ctx: CanvasRenderingContext2D, source: HTMLCanvasElement, lay: Layout, doc: CaptureDoc) {
+  const frame = frameOf(doc.style);
+  const quad = projectCard(lay.card.x, lay.card.y, lay.card.w, lay.card.h, frame.rotateX, frame.rotateY, frame.rotateZ);
+  const [tl, tr, br, bl] = quad;
+  ctx.save();
+  ctx.filter = doc.style.shadowBlur > 0 ? `blur(${doc.style.shadowBlur}px)` : "none";
+  ctx.fillStyle = `rgba(28, 32, 40, ${doc.style.shadowOpacity / 100})`;
+  ctx.beginPath();
+  ctx.moveTo(tl.x, tl.y + doc.style.shadowY);
+  ctx.lineTo(tr.x, tr.y + doc.style.shadowY);
+  ctx.lineTo(br.x, br.y + doc.style.shadowY);
+  ctx.lineTo(bl.x, bl.y + doc.style.shadowY);
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+
+  const flat = Math.abs(frame.rotateX) + Math.abs(frame.rotateY) + Math.abs(frame.rotateZ) < 0.4;
+  if (flat) {
+    ctx.drawImage(source, lay.card.x, lay.card.y);
+    return;
+  }
+  const strips = 56;
+  for (let index = 0; index < strips; index += 1) {
+    const start = index / strips;
+    const end = (index + 1) / strips;
+    const topLeft = mix(tl, bl, start);
+    const topRight = mix(tr, br, start);
+    const bottomLeft = mix(tl, bl, end);
+    const sy = start * source.height;
+    const sh = Math.max(1, (end - start) * source.height);
+    ctx.save();
+    ctx.transform(
+      (topRight.x - topLeft.x) / source.width,
+      (topRight.y - topLeft.y) / source.width,
+      (bottomLeft.x - topLeft.x) / sh,
+      (bottomLeft.y - topLeft.y) / sh,
+      topLeft.x,
+      topLeft.y,
+    );
+    ctx.drawImage(source, 0, sy, source.width, Math.ceil(sh) + 1, 0, 0, source.width, sh);
+    ctx.restore();
+  }
+}
+
+function mix(from: Point, to: Point, t: number): Point {
+  return { x: from.x + (to.x - from.x) * t, y: from.y + (to.y - from.y) * t };
+}
+
+export function flattenPoint(doc: CaptureDoc, x: number, y: number) {
+  const frame = frameOf(doc.style);
+  if (Math.abs(frame.rotateX) + Math.abs(frame.rotateY) + Math.abs(frame.rotateZ) < 0.4) return { x, y };
+  const lay = layoutOf(doc);
+  const [tl, tr, br, bl] = projectCard(lay.card.x, lay.card.y, lay.card.w, lay.card.h, frame.rotateX, frame.rotateY, frame.rotateZ);
+  let u = 0.5;
+  let v = 0.5;
+  for (let step = 0; step < 10; step += 1) {
+    const top = mix(tl, tr, u);
+    const bottom = mix(bl, br, u);
+    const point = mix(top, bottom, v);
+    const du = mix({ x: tr.x - tl.x, y: tr.y - tl.y }, { x: br.x - bl.x, y: br.y - bl.y }, v);
+    const dv = { x: bottom.x - top.x, y: bottom.y - top.y };
+    const det = du.x * dv.y - du.y * dv.x;
+    if (Math.abs(det) < 0.0001) break;
+    const dx = x - point.x;
+    const dy = y - point.y;
+    u = Math.min(1, Math.max(0, u + (dx * dv.y - dy * dv.x) / det));
+    v = Math.min(1, Math.max(0, v + (du.x * dy - du.y * dx) / det));
+  }
+  return { x: lay.card.x + u * lay.card.w, y: lay.card.y + v * lay.card.h };
 }
 
 export type CropEdge = "n" | "s" | "e" | "w" | "nw" | "ne" | "sw" | "se" | "move";

@@ -1,6 +1,6 @@
 import { useRef } from "react";
-import type { CaptureDoc, TextClip, ZoomClip } from "./types";
-import { formatTime, uid } from "./types";
+import type { CaptureDoc, ImageClip, TextClip, ZoomClip } from "./types";
+import { formatTime, motionOf, uid } from "./types";
 
 type TimelineProps = {
   doc: CaptureDoc;
@@ -12,8 +12,9 @@ type TimelineProps = {
 };
 
 export default function Timeline({ doc, playhead, playing, onPlayhead, onToggle, onChange }: TimelineProps) {
-  const motion = doc.motion;
+  const motion = motionOf(doc.motion);
   const laneRef = useRef<HTMLDivElement>(null);
+  const imageInput = useRef<HTMLInputElement>(null);
 
   function timeAt(clientX: number) {
     const lane = laneRef.current;
@@ -44,7 +45,32 @@ export default function Timeline({ doc, playhead, playing, onPlayhead, onToggle,
     onChange({ ...motion, texts: [...motion.texts, clip] });
   }
 
-  function dragClip(kind: "zooms" | "texts", id: string, event: React.PointerEvent<HTMLButtonElement>) {
+  function splitAtPlayhead() {
+    onChange({
+      ...motion,
+      zooms: splitClips(motion.zooms, playhead),
+      texts: splitClips(motion.texts, playhead),
+      images: splitClips(motion.images, playhead),
+    });
+  }
+
+  function addImage(file: File | undefined) {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const start = Math.min(playhead, Math.max(0, motion.duration - 0.8));
+      const clip: ImageClip = {
+        id: uid(),
+        start,
+        end: Math.min(motion.duration, start + 1.6),
+        src: String(reader.result),
+      };
+      onChange({ ...motion, images: [...motion.images, clip] });
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function dragClip(kind: "zooms" | "texts" | "images", id: string, event: React.PointerEvent<HTMLButtonElement>) {
     event.stopPropagation();
     const startX = event.clientX;
     const lane = laneRef.current;
@@ -73,6 +99,7 @@ export default function Timeline({ doc, playhead, playing, onPlayhead, onToggle,
       duration,
       zooms: motion.zooms.map((clip) => clampClip(clip, duration)),
       texts: motion.texts.map((clip) => clampClip(clip, duration)),
+      images: motion.images.map((clip) => clampClip(clip, duration)),
     });
     if (playhead > duration) onPlayhead(duration);
   }
@@ -83,15 +110,32 @@ export default function Timeline({ doc, playhead, playing, onPlayhead, onToggle,
     <div className="timeline">
       <div className="timeline-bar">
         <div className="timeline-tools">
-          <button className="tool on" title="Playhead" aria-label="Playhead">
+          <button className="tool on" title="Select" aria-label="Select" aria-pressed="true">
             <PointerIcon />
+          </button>
+          <button title="Split at playhead" aria-label="Split at playhead" onClick={splitAtPlayhead}>
+            <ScissorsIcon />
+          </button>
+          <span className="tool-gap" aria-hidden="true" />
+          <button title="Add text" aria-label="Add text" onClick={addCaption}>
+            <TextIcon />
+          </button>
+          <button title="Add image" aria-label="Add image" onClick={() => imageInput.current?.click()}>
+            <ImageIcon />
           </button>
           <button title="Add zoom" aria-label="Add zoom" onClick={addZoom}>
             <ZoomIcon />
           </button>
-          <button title="Add caption" aria-label="Add caption" onClick={addCaption}>
-            Aa
-          </button>
+          <input
+            ref={imageInput}
+            type="file"
+            accept="image/*"
+            hidden
+            onChange={(event) => {
+              addImage(event.target.files?.[0]);
+              event.target.value = "";
+            }}
+          />
         </div>
         <div className="transport">
           <span>{formatTime(playhead)}</span>
@@ -138,6 +182,19 @@ export default function Timeline({ doc, playhead, playing, onPlayhead, onToggle,
           ))}
         </div>
         <div className="lane">
+          <em>Image</em>
+          {motion.images.map((clip) => (
+            <button
+              key={clip.id}
+              className="clip image"
+              style={clipStyle(clip, motion.duration)}
+              onPointerDown={(event) => dragClip("images", clip.id, event)}
+            >
+              Image
+            </button>
+          ))}
+        </div>
+        <div className="lane">
           <em>Zoom</em>
           {motion.zooms.map((clip) => (
             <button
@@ -177,6 +234,19 @@ export default function Timeline({ doc, playhead, playing, onPlayhead, onToggle,
   );
 }
 
+function splitClips<T extends { id: string; start: number; end: number }>(clips: T[], time: number) {
+  const minSpan = 0.12;
+  const next: T[] = [];
+  for (const clip of clips) {
+    if (time > clip.start + minSpan && time < clip.end - minSpan) {
+      next.push({ ...clip, end: time }, { ...clip, id: uid(), start: time });
+    } else {
+      next.push(clip);
+    }
+  }
+  return next;
+}
+
 function clipStyle(clip: { start: number; end: number }, duration: number) {
   return { left: `${(clip.start / duration) * 100}%`, width: `${((clip.end - clip.start) / duration) * 100}%` };
 }
@@ -191,6 +261,35 @@ function PointerIcon() {
   return (
     <svg viewBox="0 0 16 16" aria-hidden="true">
       <path d="M3 2.2 12.2 8.1 7.4 8.8 5.6 13.2Z" fill="currentColor" />
+    </svg>
+  );
+}
+
+function ScissorsIcon() {
+  return (
+    <svg viewBox="0 0 16 16" aria-hidden="true">
+      <circle cx="4.2" cy="4.2" r="1.7" fill="none" stroke="currentColor" strokeWidth="1.4" />
+      <circle cx="4.2" cy="11.8" r="1.7" fill="none" stroke="currentColor" strokeWidth="1.4" />
+      <path d="M5.6 5.4 13 12.2M5.6 10.6 13 3.8" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function TextIcon() {
+  return (
+    <svg viewBox="0 0 16 16" aria-hidden="true">
+      <path d="M3.2 3.4h6.2M6.3 3.4v9.2" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M11.2 3.2v9.6" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function ImageIcon() {
+  return (
+    <svg viewBox="0 0 16 16" aria-hidden="true">
+      <rect x="2.2" y="3.2" width="9.2" height="9.2" rx="1.6" fill="none" stroke="currentColor" strokeWidth="1.4" />
+      <path d="M3.4 10.2 6 7.6l2 1.8 1.2-1.1 1.6 1.9" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" />
+      <path d="M12.2 4.2v3.2M10.6 5.8h3.2" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
     </svg>
   );
 }
