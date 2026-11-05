@@ -25,9 +25,9 @@ npm run tauri dev
 
 ## Edit
 
-**Static** is the still editor. Crop the shot, then draw a rectangle, ellipse, line, arrow, text, or freehand mark. The inspector sets padding, wallpaper, border, and shadow. Export writes a PNG.
+**Static** is the still editor. Crop the shot, then draw a rectangle, ellipse, line, arrow, text, or freehand mark. The inspector sets padding, wallpaper, border, shadow, zoom, position, and rotation. Export writes a PNG.
 
-**Motion** plays that still on a timeline. Add a zoom or a caption, then export a WebM.
+**Motion** plays that still on a timeline. Select a clip, split it at the playhead, or add text, an image, or a zoom. Export writes a WebM.
 
 ## Shortcuts
 
