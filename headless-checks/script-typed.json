@@ -1,0 +1,2202 @@
+{
+  "accessibility": {
+    "bounds": [
+      0.0,
+      0.0,
+      1100.0,
+      720.0
+    ],
+    "children": [
+      {
+        "bounds": [
+          0.0,
+          0.0,
+          1100.0,
+          720.0
+        ],
+        "children": [
+          {
+            "bounds": [
+              0.0,
+              0.0,
+              1100.0,
+              44.0
+            ],
+            "children": [
+              {
+                "bounds": [
+                  14.0,
+                  12.0,
+                  71.5,
+                  20.0
+                ],
+                "name": "Screentrics",
+                "role": "label"
+              },
+              {
+                "bounds": [
+                  91.5,
+                  0.0,
+                  954.5,
+                  44.0
+                ],
+                "key": "titlebar-tabs",
+                "role": "group"
+              },
+              {
+                "actions": [
+                  "click",
+                  "focus"
+                ],
+                "bounds": [
+                  1052.0,
+                  14.0,
+                  36.0,
+                  16.0
+                ],
+                "key": "theme",
+                "name": "Dark theme",
+                "role": "switch",
+                "states": [
+                  "checked"
+                ]
+              }
+            ],
+            "key": "titlebar",
+            "role": "toolbar"
+          },
+          {
+            "bounds": [
+              0.0,
+              44.0,
+              1100.0,
+              676.0
+            ],
+            "children": [
+              {
+                "bounds": [
+                  16.0,
+                  60.0,
+                  1068.0,
+                  644.0
+                ],
+                "children": [
+                  {
+                    "bounds": [
+                      16.0,
+                      60.0,
+                      772.0,
+                      644.0
+                    ],
+                    "children": [
+                      {
+                        "bounds": [
+                          16.0,
+                          60.0,
+                          772.0,
+                          28.0
+                        ],
+                        "children": [
+                          {
+                            "actions": [
+                              "click",
+                              "focus"
+                            ],
+                            "bounds": [
+                              16.0,
+                              62.0,
+                              68.0,
+                              24.0
+                            ],
+                            "key": "back",
+                            "name": "Library",
+                            "role": "button"
+                          },
+                          {
+                            "bounds": [
+                              92.0,
+                              60.0,
+                              133.0,
+                              28.0
+                            ],
+                            "children": [
+                              {
+                                "actions": [
+                                  "click",
+                                  "focus"
+                                ],
+                                "bounds": [
+                                  92.0,
+                                  60.0,
+                                  66.5,
+                                  28.0
+                                ],
+                                "key": "segment0",
+                                "name": "Still",
+                                "position": 1,
+                                "role": "radio-button",
+                                "states": [
+                                  "unchecked"
+                                ]
+                              },
+                              {
+                                "actions": [
+                                  "click",
+                                  "focus"
+                                ],
+                                "bounds": [
+                                  158.5,
+                                  60.0,
+                                  66.5,
+                                  28.0
+                                ],
+                                "key": "segment1",
+                                "name": "Motion",
+                                "position": 2,
+                                "role": "radio-button",
+                                "states": [
+                                  "checked"
+                                ]
+                              }
+                            ],
+                            "key": "mode",
+                            "name": "Editor mode",
+                            "role": "radio-group",
+                            "setSize": 2
+                          }
+                        ],
+                        "key": "editor-tools",
+                        "role": "toolbar"
+                      },
+                      {
+                        "bounds": [
+                          238.0,
+                          100.0,
+                          328.0,
+                          199.0
+                        ],
+                        "children": [
+                          {
+                            "bounds": [
+                              150.5,
+                              62.7,
+                              389.6,
+                              266.8
+                            ],
+                            "key": "shot",
+                            "role": "image"
+                          }
+                        ],
+                        "key": "wallpaper",
+                        "name": "Capture on wallpaper",
+                        "role": "image"
+                      },
+                      {
+                        "bounds": [
+                          16.0,
+                          311.0,
+                          772.0,
+                          16.0
+                        ],
+                        "key": "motion-summary",
+                        "name": "Motion 5.0s · 1 zooms · 1 captions · 2 images. WebM export needs a video encoder Rune does not ship.",
+                        "role": "label"
+                      }
+                    ],
+                    "key": "stage",
+                    "role": "group"
+                  },
+                  {
+                    "bounds": [
+                      804.0,
+                      60.0,
+                      280.0,
+                      644.0
+                    ],
+                    "children": [
+                      {
+                        "actions": [
+                          "scroll-up",
+                          "scroll-down",
+                          "set-scroll-offset"
+                        ],
+                        "bounds": [
+                          804.0,
+                          60.0,
+                          280.0,
+                          644.0
+                        ],
+                        "children": [
+                          {
+                            "actions": [
+                              "scroll-into-view"
+                            ],
+                            "bounds": [
+                              804.0,
+                              60.0,
+                              280.0,
+                              20.0
+                            ],
+                            "name": "Inspector",
+                            "role": "label"
+                          },
+                          {
+                            "actions": [
+                              "scroll-into-view"
+                            ],
+                            "bounds": [
+                              804.0,
+                              92.0,
+                              272.0,
+                              28.0
+                            ],
+                            "children": [
+                              {
+                                "actions": [
+                                  "click",
+                                  "focus",
+                                  "set-value",
+                                  "replace-selected-text",
+                                  "set-text-selection",
+                                  "scroll-into-view"
+                                ],
+                                "bounds": [
+                                  812.0,
+                                  98.0,
+                                  264.0,
+                                  16.0
+                                ],
+                                "key": "input",
+                                "name": "Title",
+                                "placeholder": "Title",
+                                "role": "text-input",
+                                "selection": [
+                                  1,
+                                  13,
+                                  1,
+                                  13
+                                ],
+                                "value": "Area captureA"
+                              }
+                            ],
+                            "key": "value",
+                            "role": "group"
+                          },
+                          {
+                            "actions": [
+                              "focus",
+                              "increment",
+                              "decrement",
+                              "set-value",
+                              "scroll-into-view"
+                            ],
+                            "bounds": [
+                              804.0,
+                              132.0,
+                              280.0,
+                              32.0
+                            ],
+                            "children": [
+                              {
+                                "actions": [
+                                  "scroll-into-view"
+                                ],
+                                "bounds": [
+                                  804.0,
+                                  142.0,
+                                  88.0,
+                                  12.0
+                                ],
+                                "name": "Scale",
+                                "role": "label"
+                              },
+                              {
+                                "actions": [
+                                  "scroll-into-view"
+                                ],
+                                "bounds": [
+                                  900.0,
+                                  146.0,
+                                  128.0,
+                                  4.0
+                                ],
+                                "key": "track",
+                                "role": "group"
+                              },
+                              {
+                                "actions": [
+                                  "scroll-into-view"
+                                ],
+                                "bounds": [
+                                  1036.0,
+                                  139.0,
+                                  48.0,
+                                  18.0
+                                ],
+                                "name": "1.3",
+                                "role": "label"
+                              }
+                            ],
+                            "key": "scale",
+                            "name": "Scale",
+                            "range": [
+                              1.27,
+                              1.0,
+                              3.0,
+                              0.1
+                            ],
+                            "role": "slider"
+                          },
+                          {
+                            "actions": [
+                              "focus",
+                              "increment",
+                              "decrement",
+                              "set-value",
+                              "scroll-into-view"
+                            ],
+                            "bounds": [
+                              804.0,
+                              176.0,
+                              280.0,
+                              32.0
+                            ],
+                            "children": [
+                              {
+                                "actions": [
+                                  "scroll-into-view"
+                                ],
+                                "bounds": [
+                                  804.0,
+                                  186.0,
+                                  88.0,
+                                  12.0
+                                ],
+                                "name": "Position X",
+                                "role": "label"
+                              },
+                              {
+                                "actions": [
+                                  "scroll-into-view"
+                                ],
+                                "bounds": [
+                                  900.0,
+                                  190.0,
+                                  128.0,
+                                  4.0
+                                ],
+                                "key": "track",
+                                "role": "group"
+                              },
+                              {
+                                "actions": [
+                                  "scroll-into-view"
+                                ],
+                                "bounds": [
+                                  1036.0,
+                                  183.0,
+                                  48.0,
+                                  18.0
+                                ],
+                                "name": "-27.0",
+                                "role": "label"
+                              }
+                            ],
+                            "key": "focusX",
+                            "name": "Position X",
+                            "range": [
+                              -27.0,
+                              -100.0,
+                              100.0,
+                              5.0
+                            ],
+                            "role": "slider"
+                          },
+                          {
+                            "actions": [
+                              "focus",
+                              "increment",
+                              "decrement",
+                              "set-value",
+                              "scroll-into-view"
+                            ],
+                            "bounds": [
+                              804.0,
+                              220.0,
+                              280.0,
+                              32.0
+                            ],
+                            "children": [
+                              {
+                                "actions": [
+                                  "scroll-into-view"
+                                ],
+                                "bounds": [
+                                  804.0,
+                                  230.0,
+                                  88.0,
+                                  12.0
+                                ],
+                                "name": "Position Y",
+                                "role": "label"
+                              },
+                              {
+                                "actions": [
+                                  "scroll-into-view"
+                                ],
+                                "bounds": [
+                                  900.0,
+                                  234.0,
+                                  128.0,
+                                  4.0
+                                ],
+                                "key": "track",
+                                "role": "group"
+                              },
+                              {
+                                "actions": [
+                                  "scroll-into-view"
+                                ],
+                                "bounds": [
+                                  1036.0,
+                                  227.0,
+                                  48.0,
+                                  18.0
+                                ],
+                                "name": "-3.0",
+                                "role": "label"
+                              }
+                            ],
+                            "key": "focusY",
+                            "name": "Position Y",
+                            "range": [
+                              -3.0,
+                              -100.0,
+                              100.0,
+                              5.0
+                            ],
+                            "role": "slider"
+                          },
+                          {
+                            "actions": [
+                              "focus",
+                              "increment",
+                              "decrement",
+                              "set-value",
+                              "scroll-into-view"
+                            ],
+                            "bounds": [
+                              804.0,
+                              264.0,
+                              280.0,
+                              32.0
+                            ],
+                            "children": [
+                              {
+                                "actions": [
+                                  "scroll-into-view"
+                                ],
+                                "bounds": [
+                                  804.0,
+                                  274.0,
+                                  88.0,
+                                  12.0
+                                ],
+                                "name": "Rotate X",
+                                "role": "label"
+                              },
+                              {
+                                "actions": [
+                                  "scroll-into-view"
+                                ],
+                                "bounds": [
+                                  900.0,
+                                  278.0,
+                                  128.0,
+                                  4.0
+                                ],
+                                "key": "track",
+                                "role": "group"
+                              },
+                              {
+                                "actions": [
+                                  "scroll-into-view"
+                                ],
+                                "bounds": [
+                                  1036.0,
+                                  271.0,
+                                  48.0,
+                                  18.0
+                                ],
+                                "name": "2.0",
+                                "role": "label"
+                              }
+                            ],
+                            "key": "rotateX",
+                            "name": "Rotate X",
+                            "range": [
+                              2.0,
+                              -60.0,
+                              60.0,
+                              2.0
+                            ],
+                            "role": "slider"
+                          },
+                          {
+                            "actions": [
+                              "focus",
+                              "increment",
+                              "decrement",
+                              "set-value",
+                              "scroll-into-view"
+                            ],
+                            "bounds": [
+                              804.0,
+                              308.0,
+                              280.0,
+                              32.0
+                            ],
+                            "children": [
+                              {
+                                "actions": [
+                                  "scroll-into-view"
+                                ],
+                                "bounds": [
+                                  804.0,
+                                  318.0,
+                                  88.0,
+                                  12.0
+                                ],
+                                "name": "Rotate Y",
+                                "role": "label"
+                              },
+                              {
+                                "actions": [
+                                  "scroll-into-view"
+                                ],
+                                "bounds": [
+                                  900.0,
+                                  322.0,
+                                  128.0,
+                                  4.0
+                                ],
+                                "key": "track",
+                                "role": "group"
+                              },
+                              {
+                                "actions": [
+                                  "scroll-into-view"
+                                ],
+                                "bounds": [
+                                  1036.0,
+                                  315.0,
+                                  48.0,
+                                  18.0
+                                ],
+                                "name": "-48.0",
+                                "role": "label"
+                              }
+                            ],
+                            "key": "rotateY",
+                            "name": "Rotate Y",
+                            "range": [
+                              -48.0,
+                              -60.0,
+                              60.0,
+                              2.0
+                            ],
+                            "role": "slider"
+                          },
+                          {
+                            "actions": [
+                              "focus",
+                              "increment",
+                              "decrement",
+                              "set-value",
+                              "scroll-into-view"
+                            ],
+                            "bounds": [
+                              804.0,
+                              352.0,
+                              280.0,
+                              32.0
+                            ],
+                            "children": [
+                              {
+                                "actions": [
+                                  "scroll-into-view"
+                                ],
+                                "bounds": [
+                                  804.0,
+                                  362.0,
+                                  88.0,
+                                  12.0
+                                ],
+                                "name": "Rotate Z",
+                                "role": "label"
+                              },
+                              {
+                                "actions": [
+                                  "scroll-into-view"
+                                ],
+                                "bounds": [
+                                  900.0,
+                                  366.0,
+                                  128.0,
+                                  4.0
+                                ],
+                                "key": "track",
+                                "role": "group"
+                              },
+                              {
+                                "actions": [
+                                  "scroll-into-view"
+                                ],
+                                "bounds": [
+                                  1036.0,
+                                  359.0,
+                                  48.0,
+                                  18.0
+                                ],
+                                "name": "-13.0",
+                                "role": "label"
+                              }
+                            ],
+                            "key": "rotateZ",
+                            "name": "Rotate Z",
+                            "range": [
+                              -13.0,
+                              -60.0,
+                              60.0,
+                              2.0
+                            ],
+                            "role": "slider"
+                          },
+                          {
+                            "actions": [
+                              "click",
+                              "focus",
+                              "scroll-into-view"
+                            ],
+                            "bounds": [
+                              804.0,
+                              396.0,
+                              280.0,
+                              24.0
+                            ],
+                            "key": "reset-frame",
+                            "name": "Reset frame",
+                            "role": "button"
+                          },
+                          {
+                            "actions": [
+                              "click",
+                              "focus",
+                              "scroll-into-view"
+                            ],
+                            "bounds": [
+                              804.0,
+                              432.0,
+                              280.0,
+                              24.0
+                            ],
+                            "key": "export-png",
+                            "name": "Export PNG",
+                            "role": "button"
+                          },
+                          {
+                            "actions": [
+                              "scroll-into-view"
+                            ],
+                            "bounds": [
+                              804.0,
+                              468.0,
+                              280.0,
+                              16.0
+                            ],
+                            "name": "8 marks stay in the document.",
+                            "role": "label"
+                          }
+                        ],
+                        "key": "inspector",
+                        "role": "complementary",
+                        "scroll": [
+                          0.0,
+                          0.0,
+                          0.0
+                        ],
+                        "states": [
+                          "clips"
+                        ]
+                      }
+                    ],
+                    "key": "inspector-scroll-area",
+                    "role": "group"
+                  }
+                ],
+                "key": "editor",
+                "role": "group"
+              }
+            ],
+            "key": "body",
+            "role": "group"
+          },
+          {
+            "bounds": [
+              0.0,
+              720.0,
+              1100.0,
+              0.0
+            ],
+            "key": "status",
+            "role": "group"
+          }
+        ],
+        "key": "window",
+        "role": "group"
+      }
+    ],
+    "name": "Screentrics",
+    "role": "window"
+  },
+  "anim_t": 0.9500000000000013,
+  "animating": true,
+  "dark_system": false,
+  "elements": [
+    {
+      "blur": 0.0,
+      "fill": "#121314ff",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "window",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window",
+      "rect": [
+        0.0,
+        0.0,
+        1100.0,
+        720.0
+      ],
+      "role": "group",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "fill": "#121314ff",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "titlebar",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/titlebar",
+      "rect": [
+        0.0,
+        0.0,
+        1100.0,
+        44.0
+      ],
+      "role": "toolbar",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "color": "#eff0f2ff",
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/titlebar/#0",
+      "rect": [
+        14.0,
+        12.0,
+        71.5,
+        20.0
+      ],
+      "role": "text",
+      "scale": 1.0,
+      "text": "Screentrics"
+    },
+    {
+      "blur": 0.0,
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "titlebar-tabs",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/titlebar/titlebar-tabs",
+      "rect": [
+        91.5,
+        0.0,
+        954.5,
+        44.0
+      ],
+      "role": "group",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": true,
+      "focused": false,
+      "inert": false,
+      "key": "theme",
+      "label": "Dark theme",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/titlebar/theme",
+      "rect": [
+        1052.0,
+        14.0,
+        36.0,
+        16.0
+      ],
+      "role": "switch",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "fill": "#4392f7ff",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "control",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/titlebar/theme/control",
+      "rect": [
+        1052.0,
+        14.0,
+        36.0,
+        16.0
+      ],
+      "role": "group",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "fill": "#fafafaff",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "thumb",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/titlebar/theme/control/thumb",
+      "rect": [
+        1066.0,
+        15.0,
+        21.0,
+        14.0
+      ],
+      "role": "group",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "fill": "#121314ff",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "body",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body",
+      "rect": [
+        0.0,
+        44.0,
+        1100.0,
+        676.0
+      ],
+      "role": "group",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "editor",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor",
+      "rect": [
+        16.0,
+        60.0,
+        1068.0,
+        644.0
+      ],
+      "role": "group",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "stage",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/stage",
+      "rect": [
+        16.0,
+        60.0,
+        772.0,
+        644.0
+      ],
+      "role": "group",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "editor-tools",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/stage/editor-tools",
+      "rect": [
+        16.0,
+        60.0,
+        772.0,
+        28.0
+      ],
+      "role": "toolbar",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": true,
+      "focused": false,
+      "inert": false,
+      "key": "back",
+      "label": "Library",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/stage/editor-tools/back",
+      "rect": [
+        16.0,
+        62.0,
+        68.0,
+        24.0
+      ],
+      "role": "button",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "color": "#eff0f2ff",
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "label",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/stage/editor-tools/back/label",
+      "rect": [
+        28.0,
+        64.0,
+        44.0,
+        20.0
+      ],
+      "role": "text",
+      "scale": 1.0,
+      "text": "Library"
+    },
+    {
+      "blur": 0.0,
+      "fill": "#121314ff",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "mode",
+      "label": "Editor mode",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/stage/editor-tools/mode",
+      "rect": [
+        92.0,
+        60.0,
+        133.0,
+        28.0
+      ],
+      "role": "radiogroup",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "fill": "#1c1d20ff",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "indicator",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/stage/editor-tools/mode/indicator",
+      "rect": [
+        158.5,
+        60.0,
+        66.5,
+        28.0
+      ],
+      "role": "group",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": true,
+      "focused": false,
+      "inert": false,
+      "key": "segment0",
+      "label": "Still",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/stage/editor-tools/mode/segment0",
+      "rect": [
+        92.0,
+        60.0,
+        66.5,
+        28.0
+      ],
+      "role": "radio",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "color": "#a2a5aaff",
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "label",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/stage/editor-tools/mode/segment0/label",
+      "rect": [
+        114.0,
+        67.5,
+        22.5,
+        13.0
+      ],
+      "role": "text",
+      "scale": 1.0,
+      "text": "Still"
+    },
+    {
+      "blur": 0.0,
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": true,
+      "focused": false,
+      "hover": 1.0,
+      "inert": false,
+      "itemSelected": true,
+      "key": "segment1",
+      "label": "Motion",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/stage/editor-tools/mode/segment1",
+      "press": 1.0,
+      "rect": [
+        158.5,
+        60.0,
+        66.5,
+        28.0
+      ],
+      "role": "radio",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "color": "#eff0f2ff",
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "label",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/stage/editor-tools/mode/segment1/label",
+      "rect": [
+        170.5,
+        67.5,
+        42.5,
+        13.0
+      ],
+      "role": "text",
+      "scale": 1.0,
+      "text": "Motion"
+    },
+    {
+      "blur": 0.0,
+      "fill": "#ffffff0d",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "wallpaper",
+      "label": "Capture on wallpaper",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/stage/wallpaper",
+      "rect": [
+        238.0,
+        100.0,
+        328.0,
+        198.99
+      ],
+      "role": "img",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "shot",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/stage/wallpaper/shot",
+      "rect": [
+        150.49,
+        62.68,
+        389.62,
+        266.84
+      ],
+      "role": "group",
+      "scale": 1.0,
+      "target": [
+        167.5,
+        100.22,
+        355.6,
+        191.76
+      ]
+    },
+    {
+      "blur": 0.0,
+      "color": "#a2a5aaff",
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "motion-summary",
+      "loopPhase": null,
+      "moving": true,
+      "opacity": 1.0,
+      "path": "window/body/editor/stage/motion-summary",
+      "rect": [
+        16.0,
+        310.99,
+        772.0,
+        16.0
+      ],
+      "role": "text",
+      "scale": 1.0,
+      "text": "Motion 5.0s · 1 zooms · 1 captions · 2 images. WebM export needs a video encoder Rune does not ship."
+    },
+    {
+      "blur": 0.0,
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "inspector-scroll-area",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area",
+      "rect": [
+        804.0,
+        60.0,
+        280.0,
+        644.0
+      ],
+      "role": "group",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "inspector",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector",
+      "rect": [
+        804.0,
+        60.0,
+        280.0,
+        644.0
+      ],
+      "role": "complementary",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "color": "#eff0f2ff",
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/#0",
+      "rect": [
+        804.0,
+        60.0,
+        280.0,
+        20.0
+      ],
+      "role": "text",
+      "scale": 1.0,
+      "text": "Inspector"
+    },
+    {
+      "blur": 0.0,
+      "fill": "#1c1d20ff",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "hover": 1.0,
+      "inert": false,
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/#1",
+      "rect": [
+        804.0,
+        92.0,
+        280.0,
+        28.0
+      ],
+      "role": "textbox",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "value",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/#1/value",
+      "rect": [
+        804.0,
+        92.0,
+        272.0,
+        28.0
+      ],
+      "role": "group",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/#1/value/#0",
+      "rect": [
+        804.0,
+        106.0,
+        2.0,
+        0.0
+      ],
+      "role": "group",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "color": "#eff0f2ff",
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": true,
+      "focused": false,
+      "inert": false,
+      "key": "input",
+      "label": "Title",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/#1/value/input",
+      "rect": [
+        812.0,
+        98.0,
+        264.0,
+        16.0
+      ],
+      "role": "textbox",
+      "scale": 1.0,
+      "text": "Area captureA"
+    },
+    {
+      "blur": 0.0,
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": true,
+      "focused": false,
+      "inert": false,
+      "key": "scale",
+      "label": "Scale",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/scale",
+      "rect": [
+        804.0,
+        132.0,
+        280.0,
+        32.0
+      ],
+      "role": "slider",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "color": "#a2a5aaff",
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/scale/#0",
+      "rect": [
+        804.0,
+        142.0,
+        88.0,
+        12.0
+      ],
+      "role": "text",
+      "scale": 1.0,
+      "text": "Scale"
+    },
+    {
+      "blur": 0.0,
+      "fill": "#ffffff16",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "track",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/scale/track",
+      "rect": [
+        900.0,
+        146.0,
+        128.0,
+        4.0
+      ],
+      "role": "group",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "fill": "#4392f7ff",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/scale/track/#0",
+      "rect": [
+        900.0,
+        146.0,
+        16.2,
+        4.0
+      ],
+      "role": "group",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "color": "#eff0f2ff",
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/scale/#2",
+      "rect": [
+        1036.0,
+        139.0,
+        48.0,
+        18.0
+      ],
+      "role": "text",
+      "scale": 1.0,
+      "text": "1.3"
+    },
+    {
+      "blur": 0.0,
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": true,
+      "focused": false,
+      "inert": false,
+      "key": "focusX",
+      "label": "Position X",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/focusX",
+      "rect": [
+        804.0,
+        176.0,
+        280.0,
+        32.0
+      ],
+      "role": "slider",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "color": "#a2a5aaff",
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/focusX/#0",
+      "rect": [
+        804.0,
+        186.0,
+        88.0,
+        12.0
+      ],
+      "role": "text",
+      "scale": 1.0,
+      "text": "Position X"
+    },
+    {
+      "blur": 0.0,
+      "fill": "#ffffff16",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "track",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/focusX/track",
+      "rect": [
+        900.0,
+        190.0,
+        128.0,
+        4.0
+      ],
+      "role": "group",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "fill": "#4392f7ff",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/focusX/track/#0",
+      "rect": [
+        900.0,
+        190.0,
+        43.8,
+        4.0
+      ],
+      "role": "group",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "color": "#eff0f2ff",
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/focusX/#2",
+      "rect": [
+        1036.0,
+        183.0,
+        48.0,
+        18.0
+      ],
+      "role": "text",
+      "scale": 1.0,
+      "text": "-27.0"
+    },
+    {
+      "blur": 0.0,
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": true,
+      "focused": false,
+      "inert": false,
+      "key": "focusY",
+      "label": "Position Y",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/focusY",
+      "rect": [
+        804.0,
+        220.0,
+        280.0,
+        32.0
+      ],
+      "role": "slider",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "color": "#a2a5aaff",
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/focusY/#0",
+      "rect": [
+        804.0,
+        230.0,
+        88.0,
+        12.0
+      ],
+      "role": "text",
+      "scale": 1.0,
+      "text": "Position Y"
+    },
+    {
+      "blur": 0.0,
+      "fill": "#ffffff16",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "track",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/focusY/track",
+      "rect": [
+        900.0,
+        234.0,
+        128.0,
+        4.0
+      ],
+      "role": "group",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "fill": "#4392f7ff",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/focusY/track/#0",
+      "rect": [
+        900.0,
+        234.0,
+        58.2,
+        4.0
+      ],
+      "role": "group",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "color": "#eff0f2ff",
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/focusY/#2",
+      "rect": [
+        1036.0,
+        227.0,
+        48.0,
+        18.0
+      ],
+      "role": "text",
+      "scale": 1.0,
+      "text": "-3.0"
+    },
+    {
+      "blur": 0.0,
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": true,
+      "focused": false,
+      "inert": false,
+      "key": "rotateX",
+      "label": "Rotate X",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/rotateX",
+      "rect": [
+        804.0,
+        264.0,
+        280.0,
+        32.0
+      ],
+      "role": "slider",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "color": "#a2a5aaff",
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/rotateX/#0",
+      "rect": [
+        804.0,
+        274.0,
+        88.0,
+        12.0
+      ],
+      "role": "text",
+      "scale": 1.0,
+      "text": "Rotate X"
+    },
+    {
+      "blur": 0.0,
+      "fill": "#ffffff16",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "track",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/rotateX/track",
+      "rect": [
+        900.0,
+        278.0,
+        128.0,
+        4.0
+      ],
+      "role": "group",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "fill": "#4392f7ff",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/rotateX/track/#0",
+      "rect": [
+        900.0,
+        278.0,
+        62.0,
+        4.0
+      ],
+      "role": "group",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "color": "#eff0f2ff",
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/rotateX/#2",
+      "rect": [
+        1036.0,
+        271.0,
+        48.0,
+        18.0
+      ],
+      "role": "text",
+      "scale": 1.0,
+      "text": "2.0"
+    },
+    {
+      "blur": 0.0,
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": true,
+      "focused": false,
+      "inert": false,
+      "key": "rotateY",
+      "label": "Rotate Y",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/rotateY",
+      "rect": [
+        804.0,
+        308.0,
+        280.0,
+        32.0
+      ],
+      "role": "slider",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "color": "#a2a5aaff",
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/rotateY/#0",
+      "rect": [
+        804.0,
+        318.0,
+        88.0,
+        12.0
+      ],
+      "role": "text",
+      "scale": 1.0,
+      "text": "Rotate Y"
+    },
+    {
+      "blur": 0.0,
+      "fill": "#ffffff16",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "track",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/rotateY/track",
+      "rect": [
+        900.0,
+        322.0,
+        128.0,
+        4.0
+      ],
+      "role": "group",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "fill": "#4392f7ff",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/rotateY/track/#0",
+      "rect": [
+        900.0,
+        322.0,
+        12.0,
+        4.0
+      ],
+      "role": "group",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "color": "#eff0f2ff",
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/rotateY/#2",
+      "rect": [
+        1036.0,
+        315.0,
+        48.0,
+        18.0
+      ],
+      "role": "text",
+      "scale": 1.0,
+      "text": "-48.0"
+    },
+    {
+      "blur": 0.0,
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": true,
+      "focused": false,
+      "inert": false,
+      "key": "rotateZ",
+      "label": "Rotate Z",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/rotateZ",
+      "rect": [
+        804.0,
+        352.0,
+        280.0,
+        32.0
+      ],
+      "role": "slider",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "color": "#a2a5aaff",
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/rotateZ/#0",
+      "rect": [
+        804.0,
+        362.0,
+        88.0,
+        12.0
+      ],
+      "role": "text",
+      "scale": 1.0,
+      "text": "Rotate Z"
+    },
+    {
+      "blur": 0.0,
+      "fill": "#ffffff16",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "track",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/rotateZ/track",
+      "rect": [
+        900.0,
+        366.0,
+        128.0,
+        4.0
+      ],
+      "role": "group",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "fill": "#4392f7ff",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/rotateZ/track/#0",
+      "rect": [
+        900.0,
+        366.0,
+        47.0,
+        4.0
+      ],
+      "role": "group",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "color": "#eff0f2ff",
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/rotateZ/#2",
+      "rect": [
+        1036.0,
+        359.0,
+        48.0,
+        18.0
+      ],
+      "role": "text",
+      "scale": 1.0,
+      "text": "-13.0"
+    },
+    {
+      "blur": 0.0,
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": true,
+      "focused": false,
+      "inert": false,
+      "key": "reset-frame",
+      "label": "Reset frame",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/reset-frame",
+      "rect": [
+        804.0,
+        396.0,
+        280.0,
+        24.0
+      ],
+      "role": "button",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "color": "#eff0f2ff",
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "label",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/reset-frame/label",
+      "rect": [
+        906.5,
+        398.0,
+        75.0,
+        20.0
+      ],
+      "role": "text",
+      "scale": 1.0,
+      "text": "Reset frame"
+    },
+    {
+      "blur": 0.0,
+      "fill": "#eff0f2ff",
+      "focusVisible": false,
+      "focusable": true,
+      "focused": false,
+      "inert": false,
+      "key": "export-png",
+      "label": "Export PNG",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/export-png",
+      "rect": [
+        804.0,
+        432.0,
+        280.0,
+        24.0
+      ],
+      "role": "button",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "color": "#1c1d20ff",
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "label",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/export-png/label",
+      "rect": [
+        907.75,
+        434.0,
+        72.5,
+        20.0
+      ],
+      "role": "text",
+      "scale": 1.0,
+      "text": "Export PNG"
+    },
+    {
+      "blur": 0.0,
+      "color": "#a2a5aaff",
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/inspector/#10",
+      "rect": [
+        804.0,
+        468.0,
+        280.0,
+        16.0
+      ],
+      "role": "text",
+      "scale": 1.0,
+      "text": "8 marks stay in the document."
+    },
+    {
+      "blur": 0.0,
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "scroll-bar",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/scroll-bar",
+      "rect": [
+        1070.0,
+        62.0,
+        14.0,
+        0.0
+      ],
+      "role": "group",
+      "scale": 1.0,
+      "target": [
+        804.0,
+        60.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "blur": 0.0,
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "thumb-slot",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/scroll-bar/thumb-slot",
+      "rect": [
+        1072.0,
+        62.0,
+        10.0,
+        0.0
+      ],
+      "role": "group",
+      "scale": 1.0,
+      "target": [
+        804.0,
+        60.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "blur": 0.0,
+      "fill": "#ffffff0d",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "thumb",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/editor/inspector-scroll-area/scroll-bar/thumb-slot/thumb",
+      "rect": [
+        1076.0,
+        62.0,
+        6.0,
+        0.0
+      ],
+      "role": "group",
+      "scale": 1.0,
+      "target": [
+        804.0,
+        60.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "blur": 0.0,
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "status",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/status",
+      "rect": [
+        0.0,
+        720.0,
+        1100.0,
+        0.0
+      ],
+      "role": "group",
+      "scale": 1.0
+    }
+  ],
+  "reduced_motion": false,
+  "scale": 2.0,
+  "t": 0.95,
+  "time_scale": 1.0,
+  "title": "Screentrics",
+  "viewport": [
+    1100.0,
+    720.0
+  ],
+  "warnings": []
+}

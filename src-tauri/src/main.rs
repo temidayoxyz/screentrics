@@ -2,5 +2,5 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 fn main() {
-    screentrics_lib::run()
+    screentrics_lib::run_studio()
 }

@@ -1,4 +1,7 @@
 mod capture;
+mod studio;
+
+pub use studio::run as run_studio;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {

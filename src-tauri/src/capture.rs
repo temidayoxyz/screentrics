@@ -7,36 +7,35 @@ use base64::engine::general_purpose::STANDARD;
 use image::codecs::jpeg::JpegEncoder;
 use image::{ExtendedColorType, RgbaImage};
 use serde::{Deserialize, Serialize};
-use tauri::{AppHandle, Manager};
 use xcap::{Monitor, Window};
 
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MonitorInfo {
-    index: usize,
-    name: String,
-    width: u32,
-    height: u32,
-    x: i32,
-    y: i32,
-    primary: bool,
+    pub index: usize,
+    pub name: String,
+    pub width: u32,
+    pub height: u32,
+    pub x: i32,
+    pub y: i32,
+    pub primary: bool,
 }
 
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct WindowInfo {
-    id: String,
-    title: String,
-    app: String,
-    width: u32,
-    height: u32,
+    pub id: String,
+    pub title: String,
+    pub app: String,
+    pub width: u32,
+    pub height: u32,
 }
 
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Sources {
-    monitors: Vec<MonitorInfo>,
-    windows: Vec<WindowInfo>,
+    pub monitors: Vec<MonitorInfo>,
+    pub windows: Vec<WindowInfo>,
 }
 
 #[derive(Serialize)]
@@ -51,10 +50,10 @@ pub struct PrimaryBounds {
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Captured {
-    id: String,
-    width: u32,
-    height: u32,
-    thumb: String,
+    pub id: String,
+    pub width: u32,
+    pub height: u32,
+    pub thumb: String,
 }
 
 #[derive(Serialize)]
@@ -67,8 +66,8 @@ pub struct Thumb {
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LibraryPayload {
-    captures: Vec<serde_json::Value>,
-    thumbs: Vec<Thumb>,
+    pub captures: Vec<serde_json::Value>,
+    pub thumbs: Vec<Thumb>,
 }
 
 #[derive(Serialize, Deserialize, Default)]
@@ -76,22 +75,32 @@ struct LibraryFile {
     captures: Vec<serde_json::Value>,
 }
 
-fn captures_dir(app: &AppHandle) -> Result<PathBuf, String> {
-    let dir = app
-        .path()
-        .app_data_dir()
-        .map_err(|error| error.to_string())?
-        .join("captures");
+/// Same folder Tauri uses for identifier `app.screentrics.desktop`.
+pub fn app_data_dir() -> PathBuf {
+    #[cfg(windows)]
+    let base = std::env::var_os("APPDATA")
+        .map(PathBuf::from)
+        .unwrap_or_else(|| PathBuf::from("."));
+    #[cfg(target_os = "macos")]
+    let base = std::env::var_os("HOME")
+        .map(|home| PathBuf::from(home).join("Library/Application Support"))
+        .unwrap_or_else(|| PathBuf::from("."));
+    #[cfg(all(unix, not(target_os = "macos")))]
+    let base = std::env::var_os("XDG_DATA_HOME")
+        .map(PathBuf::from)
+        .or_else(|| std::env::var_os("HOME").map(|home| PathBuf::from(home).join(".local/share")))
+        .unwrap_or_else(|| PathBuf::from("."));
+    base.join("app.screentrics.desktop")
+}
+
+fn captures_dir() -> Result<PathBuf, String> {
+    let dir = app_data_dir().join("captures");
     fs::create_dir_all(&dir).map_err(|error| error.to_string())?;
     Ok(dir)
 }
 
-fn library_path(app: &AppHandle) -> Result<PathBuf, String> {
-    Ok(app
-        .path()
-        .app_data_dir()
-        .map_err(|error| error.to_string())?
-        .join("library.json"))
+fn library_path() -> PathBuf {
+    app_data_dir().join("library.json")
 }
 
 fn safe_id(id: &str) -> Result<(), String> {
@@ -138,16 +147,28 @@ fn jpeg_bytes(image: &RgbaImage, max_edge: u32, quality: u8) -> Result<Vec<u8>, 
     Ok(bytes)
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn library_stays_in_the_tauri_data_folder() {
+        let path = app_data_dir();
+        assert!(path.ends_with("app.screentrics.desktop"));
+        assert_eq!(path.join("library.json"), library_path());
+    }
+}
+
 fn data_url(mime: &str, bytes: &[u8]) -> String {
     format!("data:{mime};base64,{}", STANDARD.encode(bytes))
 }
 
-fn store_image(app: &AppHandle, image: RgbaImage) -> Result<Captured, String> {
+fn store_image(image: RgbaImage) -> Result<Captured, String> {
     if image.width() < 2 || image.height() < 2 {
         return Err("The capture was too small.".into());
     }
     let id = new_id();
-    let dir = captures_dir(app)?;
+    let dir = captures_dir()?;
     image
         .save(dir.join(format!("{id}.png")))
         .map_err(|error| format!("Could not save the capture. {error}"))?;
@@ -205,34 +226,36 @@ fn useful_window(window: &Window) -> Option<WindowInfo> {
     })
 }
 
+pub fn list_sources_blocking() -> Result<Sources, String> {
+    let monitors = Monitor::all().map_err(|error| error.to_string())?;
+    let monitors = monitors
+        .iter()
+        .enumerate()
+        .map(|(index, monitor)| MonitorInfo {
+            index,
+            name: monitor_name(monitor, index),
+            width: monitor.width().unwrap_or(0),
+            height: monitor.height().unwrap_or(0),
+            x: monitor.x().unwrap_or(0),
+            y: monitor.y().unwrap_or(0),
+            primary: monitor.is_primary().unwrap_or(false),
+        })
+        .collect();
+    let mut windows = Window::all()
+        .map_err(|error| error.to_string())?
+        .iter()
+        .filter_map(useful_window)
+        .collect::<Vec<_>>();
+    windows.sort_by_key(|window| window.title.to_lowercase());
+    windows.truncate(60);
+    Ok(Sources { monitors, windows })
+}
+
 #[tauri::command]
 pub async fn list_sources() -> Result<Sources, String> {
-    tauri::async_runtime::spawn_blocking(|| {
-        let monitors = Monitor::all().map_err(|error| error.to_string())?;
-        let monitors = monitors
-            .iter()
-            .enumerate()
-            .map(|(index, monitor)| MonitorInfo {
-                index,
-                name: monitor_name(monitor, index),
-                width: monitor.width().unwrap_or(0),
-                height: monitor.height().unwrap_or(0),
-                x: monitor.x().unwrap_or(0),
-                y: monitor.y().unwrap_or(0),
-                primary: monitor.is_primary().unwrap_or(false),
-            })
-            .collect();
-        let mut windows = Window::all()
-            .map_err(|error| error.to_string())?
-            .iter()
-            .filter_map(useful_window)
-            .collect::<Vec<_>>();
-        windows.sort_by(|a, b| a.title.to_lowercase().cmp(&b.title.to_lowercase()));
-        windows.truncate(60);
-        Ok(Sources { monitors, windows })
-    })
-    .await
-    .map_err(|error| error.to_string())?
+    tauri::async_runtime::spawn_blocking(list_sources_blocking)
+        .await
+        .map_err(|error| error.to_string())?
 }
 
 #[tauri::command]
@@ -251,83 +274,83 @@ pub async fn primary_bounds() -> Result<PrimaryBounds, String> {
     .map_err(|error| error.to_string())?
 }
 
-#[tauri::command]
-pub async fn capture_monitor(app: AppHandle, index: usize) -> Result<Captured, String> {
-    let image = tauri::async_runtime::spawn_blocking(move || {
-        let monitors = Monitor::all().map_err(|error| error.to_string())?;
-        let monitor = monitors
-            .get(index)
-            .ok_or("That screen is no longer available.")?;
-        monitor.capture_image().map_err(|error| {
-            format!("Could not capture the screen. {error}")
-        })
-    })
-    .await
-    .map_err(|error| error.to_string())??;
-    store_image(&app, image)
+pub fn capture_monitor_blocking(index: usize) -> Result<Captured, String> {
+    let monitors = Monitor::all().map_err(|error| error.to_string())?;
+    let monitor = monitors
+        .get(index)
+        .ok_or("That screen is no longer available.")?;
+    let image = monitor
+        .capture_image()
+        .map_err(|error| format!("Could not capture the screen. {error}"))?;
+    store_image(image)
 }
 
 #[tauri::command]
-pub async fn capture_window(app: AppHandle, id: String) -> Result<Captured, String> {
-    let image = tauri::async_runtime::spawn_blocking(move || {
-        let windows = Window::all().map_err(|error| error.to_string())?;
-        let window = windows
-            .into_iter()
-            .find(|window| window.id().map(|value| value.to_string()).unwrap_or_default() == id)
-            .ok_or("That window is no longer open.")?;
-        window
-            .capture_image()
-            .map_err(|error| format!("Could not capture that window. {error}"))
-    })
-    .await
-    .map_err(|error| error.to_string())??;
-    store_image(&app, image)
+pub async fn capture_monitor(index: usize) -> Result<Captured, String> {
+    tauri::async_runtime::spawn_blocking(move || capture_monitor_blocking(index))
+        .await
+        .map_err(|error| error.to_string())?
+}
+
+pub fn capture_window_blocking(id: String) -> Result<Captured, String> {
+    let windows = Window::all().map_err(|error| error.to_string())?;
+    let window = windows
+        .into_iter()
+        .find(|window| window.id().map(|value| value.to_string()).unwrap_or_default() == id)
+        .ok_or("That window is no longer open.")?;
+    let image = window
+        .capture_image()
+        .map_err(|error| format!("Could not capture that window. {error}"))?;
+    store_image(image)
 }
 
 #[tauri::command]
-pub async fn capture_region(
-    app: AppHandle,
-    nx: f64,
-    ny: f64,
-    nw: f64,
-    nh: f64,
-) -> Result<Captured, String> {
-    let image = tauri::async_runtime::spawn_blocking(move || {
-        let monitors = Monitor::all().map_err(|error| error.to_string())?;
-        let monitor = primary_monitor(&monitors)?.clone();
-        let frame_width = monitor.width().map_err(|error| error.to_string())?;
-        let frame_height = monitor.height().map_err(|error| error.to_string())?;
-        let mut x = (nx.clamp(0.0, 1.0) * frame_width as f64).floor() as u32;
-        let mut y = (ny.clamp(0.0, 1.0) * frame_height as f64).floor() as u32;
-        let mut width = (nw.clamp(0.0, 1.0) * frame_width as f64).round().max(1.0) as u32;
-        let mut height = (nh.clamp(0.0, 1.0) * frame_height as f64).round().max(1.0) as u32;
-        if x >= frame_width {
-            x = frame_width.saturating_sub(1);
-        }
-        if y >= frame_height {
-            y = frame_height.saturating_sub(1);
-        }
-        width = width.min(frame_width - x).max(1);
-        height = height.min(frame_height - y).max(1);
-        monitor.capture_region(x, y, width, height).map_err(|error| {
-            format!("Could not capture that area. {error}")
-        })
-    })
-    .await
-    .map_err(|error| error.to_string())??;
-    store_image(&app, image)
+pub async fn capture_window(id: String) -> Result<Captured, String> {
+    tauri::async_runtime::spawn_blocking(move || capture_window_blocking(id))
+        .await
+        .map_err(|error| error.to_string())?
+}
+
+pub fn capture_region_blocking(nx: f64, ny: f64, nw: f64, nh: f64) -> Result<Captured, String> {
+    let monitors = Monitor::all().map_err(|error| error.to_string())?;
+    let monitor = primary_monitor(&monitors)?.clone();
+    let frame_width = monitor.width().map_err(|error| error.to_string())?;
+    let frame_height = monitor.height().map_err(|error| error.to_string())?;
+    let mut x = (nx.clamp(0.0, 1.0) * frame_width as f64).floor() as u32;
+    let mut y = (ny.clamp(0.0, 1.0) * frame_height as f64).floor() as u32;
+    let mut width = (nw.clamp(0.0, 1.0) * frame_width as f64).round().max(1.0) as u32;
+    let mut height = (nh.clamp(0.0, 1.0) * frame_height as f64).round().max(1.0) as u32;
+    if x >= frame_width {
+        x = frame_width.saturating_sub(1);
+    }
+    if y >= frame_height {
+        y = frame_height.saturating_sub(1);
+    }
+    width = width.min(frame_width - x).max(1);
+    height = height.min(frame_height - y).max(1);
+    let image = monitor
+        .capture_region(x, y, width, height)
+        .map_err(|error| format!("Could not capture that area. {error}"))?;
+    store_image(image)
 }
 
 #[tauri::command]
-pub fn load_library(app: AppHandle) -> Result<LibraryPayload, String> {
-    let path = library_path(&app)?;
+pub async fn capture_region(nx: f64, ny: f64, nw: f64, nh: f64) -> Result<Captured, String> {
+    tauri::async_runtime::spawn_blocking(move || capture_region_blocking(nx, ny, nw, nh))
+        .await
+        .map_err(|error| error.to_string())?
+}
+
+#[tauri::command]
+pub fn load_library() -> Result<LibraryPayload, String> {
+    let path = library_path();
     let library = if path.exists() {
         let text = fs::read_to_string(path).map_err(|error| error.to_string())?;
         serde_json::from_str::<LibraryFile>(&text).unwrap_or_default()
     } else {
         LibraryFile::default()
     };
-    let dir = captures_dir(&app)?;
+    let dir = captures_dir()?;
     let mut thumbs = Vec::new();
     for capture in &library.captures {
         let Some(id) = capture.get("id").and_then(|value| value.as_str()) else {
@@ -351,8 +374,8 @@ pub fn load_library(app: AppHandle) -> Result<LibraryPayload, String> {
 }
 
 #[tauri::command]
-pub fn save_library(app: AppHandle, captures: Vec<serde_json::Value>) -> Result<(), String> {
-    let dir = app.path().app_data_dir().map_err(|error| error.to_string())?;
+pub fn save_library(captures: Vec<serde_json::Value>) -> Result<(), String> {
+    let dir = app_data_dir();
     fs::create_dir_all(&dir).map_err(|error| error.to_string())?;
     let file = LibraryFile { captures };
     let json = serde_json::to_string_pretty(&file).map_err(|error| error.to_string())?;
@@ -381,9 +404,9 @@ pub fn save_library(app: AppHandle, captures: Vec<serde_json::Value>) -> Result<
 }
 
 #[tauri::command]
-pub fn load_image(app: AppHandle, id: String) -> Result<String, String> {
+pub fn load_image(id: String) -> Result<String, String> {
     safe_id(&id)?;
-    let path = captures_dir(&app)?.join(format!("{id}.png"));
+    let path = captures_dir()?.join(format!("{id}.png"));
     let bytes = fs::read(&path).map_err(|_| "This capture's image is missing.".to_string())?;
     Ok(data_url("image/png", &bytes))
 }

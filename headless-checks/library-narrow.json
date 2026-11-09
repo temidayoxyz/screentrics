@@ -1,0 +1,830 @@
+{
+  "accessibility": {
+    "bounds": [
+      0.0,
+      0.0,
+      640.0,
+      720.0
+    ],
+    "children": [
+      {
+        "bounds": [
+          0.0,
+          0.0,
+          640.0,
+          720.0
+        ],
+        "children": [
+          {
+            "bounds": [
+              0.0,
+              0.0,
+              640.0,
+              44.0
+            ],
+            "children": [
+              {
+                "bounds": [
+                  14.0,
+                  12.0,
+                  71.5,
+                  20.0
+                ],
+                "name": "Screentrics",
+                "role": "label"
+              },
+              {
+                "bounds": [
+                  91.5,
+                  0.0,
+                  494.5,
+                  44.0
+                ],
+                "key": "titlebar-tabs",
+                "role": "group"
+              },
+              {
+                "actions": [
+                  "click",
+                  "focus"
+                ],
+                "bounds": [
+                  592.0,
+                  14.0,
+                  36.0,
+                  16.0
+                ],
+                "key": "theme",
+                "name": "Dark theme",
+                "role": "switch",
+                "states": [
+                  "unchecked"
+                ]
+              }
+            ],
+            "key": "titlebar",
+            "role": "toolbar"
+          },
+          {
+            "bounds": [
+              0.0,
+              44.0,
+              640.0,
+              676.0
+            ],
+            "children": [
+              {
+                "bounds": [
+                  16.0,
+                  60.0,
+                  608.0,
+                  644.0
+                ],
+                "children": [
+                  {
+                    "bounds": [
+                      16.0,
+                      60.0,
+                      608.0,
+                      24.0
+                    ],
+                    "children": [
+                      {
+                        "actions": [
+                          "click",
+                          "focus"
+                        ],
+                        "bounds": [
+                          16.0,
+                          60.0,
+                          53.5,
+                          24.0
+                        ],
+                        "description": "Capture the middle of the primary screen",
+                        "key": "capture-area",
+                        "name": "Area",
+                        "role": "button"
+                      },
+                      {
+                        "actions": [
+                          "click",
+                          "focus"
+                        ],
+                        "bounds": [
+                          77.5,
+                          60.0,
+                          75.0,
+                          24.0
+                        ],
+                        "key": "capture-window",
+                        "name": "Window",
+                        "role": "button"
+                      },
+                      {
+                        "actions": [
+                          "click",
+                          "focus"
+                        ],
+                        "bounds": [
+                          160.5,
+                          60.0,
+                          68.0,
+                          24.0
+                        ],
+                        "key": "capture-screen",
+                        "name": "Screen",
+                        "role": "button"
+                      }
+                    ],
+                    "key": "capture-actions",
+                    "role": "toolbar"
+                  },
+                  {
+                    "bounds": [
+                      16.0,
+                      100.0,
+                      608.0,
+                      20.0
+                    ],
+                    "key": "heading",
+                    "name": "Library",
+                    "role": "label"
+                  },
+                  {
+                    "bounds": [
+                      16.0,
+                      136.0,
+                      608.0,
+                      568.0
+                    ],
+                    "children": [
+                      {
+                        "actions": [
+                          "scroll-up",
+                          "scroll-down",
+                          "set-scroll-offset"
+                        ],
+                        "bounds": [
+                          16.0,
+                          136.0,
+                          608.0,
+                          568.0
+                        ],
+                        "children": [
+                          {
+                            "actions": [
+                              "click",
+                              "focus",
+                              "scroll-into-view"
+                            ],
+                            "bounds": [
+                              16.0,
+                              136.0,
+                              608.0,
+                              44.0
+                            ],
+                            "children": [
+                              {
+                                "actions": [
+                                  "scroll-into-view"
+                                ],
+                                "bounds": [
+                                  28.0,
+                                  148.0,
+                                  517.5,
+                                  20.0
+                                ],
+                                "name": "Area capture",
+                                "role": "label"
+                              },
+                              {
+                                "actions": [
+                                  "scroll-into-view"
+                                ],
+                                "bounds": [
+                                  557.5,
+                                  150.0,
+                                  54.5,
+                                  16.0
+                                ],
+                                "name": "866 × 467",
+                                "role": "label"
+                              }
+                            ],
+                            "key": "capture-0",
+                            "name": "Area capture, 866 × 467",
+                            "role": "button"
+                          }
+                        ],
+                        "key": "captures",
+                        "role": "scroll-view",
+                        "scroll": [
+                          0.0,
+                          0.0,
+                          0.0
+                        ],
+                        "states": [
+                          "clips"
+                        ]
+                      }
+                    ],
+                    "key": "captures-scroll-area",
+                    "role": "group"
+                  }
+                ],
+                "key": "library",
+                "role": "group"
+              }
+            ],
+            "key": "body",
+            "role": "group"
+          },
+          {
+            "bounds": [
+              0.0,
+              720.0,
+              640.0,
+              0.0
+            ],
+            "key": "status",
+            "role": "group"
+          }
+        ],
+        "key": "window",
+        "role": "group"
+      }
+    ],
+    "name": "Screentrics",
+    "role": "window"
+  },
+  "anim_t": 0.0,
+  "animating": false,
+  "dark_system": false,
+  "elements": [
+    {
+      "blur": 0.0,
+      "fill": "#f0f1f4ff",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "window",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window",
+      "rect": [
+        0.0,
+        0.0,
+        640.0,
+        720.0
+      ],
+      "role": "group",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "fill": "#f0f1f4ff",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "titlebar",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/titlebar",
+      "rect": [
+        0.0,
+        0.0,
+        640.0,
+        44.0
+      ],
+      "role": "toolbar",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "color": "#1a1c1fff",
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/titlebar/#0",
+      "rect": [
+        14.0,
+        12.0,
+        71.5,
+        20.0
+      ],
+      "role": "text",
+      "scale": 1.0,
+      "text": "Screentrics"
+    },
+    {
+      "blur": 0.0,
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "titlebar-tabs",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/titlebar/titlebar-tabs",
+      "rect": [
+        91.5,
+        0.0,
+        494.5,
+        44.0
+      ],
+      "role": "group",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": true,
+      "focused": false,
+      "inert": false,
+      "key": "theme",
+      "label": "Dark theme",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/titlebar/theme",
+      "rect": [
+        592.0,
+        14.0,
+        36.0,
+        16.0
+      ],
+      "role": "switch",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "fill": "#ffffffff",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "control",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/titlebar/theme/control",
+      "rect": [
+        592.0,
+        14.0,
+        36.0,
+        16.0
+      ],
+      "role": "group",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "fill": "#ffffffff",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "thumb",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/titlebar/theme/control/thumb",
+      "rect": [
+        593.0,
+        15.0,
+        21.0,
+        14.0
+      ],
+      "role": "group",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "fill": "#f0f1f4ff",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "body",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body",
+      "rect": [
+        0.0,
+        44.0,
+        640.0,
+        676.0
+      ],
+      "role": "group",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "library",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/library",
+      "rect": [
+        16.0,
+        60.0,
+        608.0,
+        644.0
+      ],
+      "role": "group",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "capture-actions",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/library/capture-actions",
+      "rect": [
+        16.0,
+        60.0,
+        608.0,
+        24.0
+      ],
+      "role": "toolbar",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "fill": "#ffffffff",
+      "focusVisible": false,
+      "focusable": true,
+      "focused": false,
+      "help": "Capture the middle of the primary screen",
+      "inert": false,
+      "key": "capture-area",
+      "label": "Area",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/library/capture-actions/capture-area",
+      "rect": [
+        16.0,
+        60.0,
+        53.5,
+        24.0
+      ],
+      "role": "button",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "color": "#1a1c1fff",
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "label",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/library/capture-actions/capture-area/label",
+      "rect": [
+        28.0,
+        62.0,
+        29.5,
+        20.0
+      ],
+      "role": "text",
+      "scale": 1.0,
+      "text": "Area"
+    },
+    {
+      "blur": 0.0,
+      "fill": "#ffffffff",
+      "focusVisible": false,
+      "focusable": true,
+      "focused": false,
+      "inert": false,
+      "key": "capture-window",
+      "label": "Window",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/library/capture-actions/capture-window",
+      "rect": [
+        77.5,
+        60.0,
+        75.0,
+        24.0
+      ],
+      "role": "button",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "color": "#1a1c1fff",
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "label",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/library/capture-actions/capture-window/label",
+      "rect": [
+        89.5,
+        62.0,
+        51.0,
+        20.0
+      ],
+      "role": "text",
+      "scale": 1.0,
+      "text": "Window"
+    },
+    {
+      "blur": 0.0,
+      "fill": "#ffffffff",
+      "focusVisible": false,
+      "focusable": true,
+      "focused": false,
+      "inert": false,
+      "key": "capture-screen",
+      "label": "Screen",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/library/capture-actions/capture-screen",
+      "rect": [
+        160.5,
+        60.0,
+        68.0,
+        24.0
+      ],
+      "role": "button",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "color": "#1a1c1fff",
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "label",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/library/capture-actions/capture-screen/label",
+      "rect": [
+        172.5,
+        62.0,
+        44.0,
+        20.0
+      ],
+      "role": "text",
+      "scale": 1.0,
+      "text": "Screen"
+    },
+    {
+      "blur": 0.0,
+      "color": "#1a1c1fff",
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "heading",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/library/heading",
+      "rect": [
+        16.0,
+        100.0,
+        608.0,
+        20.0
+      ],
+      "role": "text",
+      "scale": 1.0,
+      "text": "Library"
+    },
+    {
+      "blur": 0.0,
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "captures-scroll-area",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/library/captures-scroll-area",
+      "rect": [
+        16.0,
+        136.0,
+        608.0,
+        568.0
+      ],
+      "role": "group",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "captures",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/library/captures-scroll-area/captures",
+      "rect": [
+        16.0,
+        136.0,
+        608.0,
+        568.0
+      ],
+      "role": "group",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "fill": "#f0f1f4ff",
+      "focusVisible": false,
+      "focusable": true,
+      "focused": false,
+      "inert": false,
+      "key": "capture-0",
+      "label": "Area capture, 866 × 467",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/library/captures-scroll-area/captures/capture-0",
+      "rect": [
+        16.0,
+        136.0,
+        608.0,
+        44.0
+      ],
+      "role": "button",
+      "scale": 1.0
+    },
+    {
+      "blur": 0.0,
+      "color": "#1a1c1fff",
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/library/captures-scroll-area/captures/capture-0/#0",
+      "rect": [
+        28.0,
+        148.0,
+        517.5,
+        20.0
+      ],
+      "role": "text",
+      "scale": 1.0,
+      "text": "Area capture"
+    },
+    {
+      "blur": 0.0,
+      "color": "#606369ff",
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/library/captures-scroll-area/captures/capture-0/#1",
+      "rect": [
+        557.5,
+        150.0,
+        54.5,
+        16.0
+      ],
+      "role": "text",
+      "scale": 1.0,
+      "text": "866 × 467"
+    },
+    {
+      "blur": 0.0,
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "scroll-bar",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/library/captures-scroll-area/scroll-bar",
+      "rect": [
+        610.0,
+        138.0,
+        14.0,
+        0.0
+      ],
+      "role": "group",
+      "scale": 1.0,
+      "target": [
+        16.0,
+        136.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "blur": 0.0,
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "thumb-slot",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/library/captures-scroll-area/scroll-bar/thumb-slot",
+      "rect": [
+        612.0,
+        138.0,
+        10.0,
+        0.0
+      ],
+      "role": "group",
+      "scale": 1.0,
+      "target": [
+        16.0,
+        136.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "blur": 0.0,
+      "fill": "#0000001a",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "thumb",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/body/library/captures-scroll-area/scroll-bar/thumb-slot/thumb",
+      "rect": [
+        616.0,
+        138.0,
+        6.0,
+        0.0
+      ],
+      "role": "group",
+      "scale": 1.0,
+      "target": [
+        16.0,
+        136.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "blur": 0.0,
+      "fill": "#00000000",
+      "focusVisible": false,
+      "focusable": false,
+      "focused": false,
+      "inert": false,
+      "key": "status",
+      "loopPhase": null,
+      "opacity": 1.0,
+      "path": "window/status",
+      "rect": [
+        0.0,
+        720.0,
+        640.0,
+        0.0
+      ],
+      "role": "group",
+      "scale": 1.0
+    }
+  ],
+  "reduced_motion": false,
+  "scale": 2.0,
+  "t": 0.0,
+  "time_scale": 1.0,
+  "title": "Screentrics",
+  "viewport": [
+    640.0,
+    720.0
+  ],
+  "warnings": []
+}
