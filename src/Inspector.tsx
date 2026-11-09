@@ -1,6 +1,7 @@
 import { useRef, useState, type ReactNode } from "react";
 import { WALLPAPER_COUNT } from "./render";
 import { frameOf, type CaptureDoc, type CaptureStyle } from "./types";
+import { Icon } from "./theme";
 
 const WALLPAPER_CLASS = ["wash-dawn", "wash-dusk", "wash-shore", "wash-tide"];
 
@@ -121,7 +122,7 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
     <section className={open ? "section open" : "section"}>
       <button className="section-title" onClick={() => setOpen((value) => !value)} aria-expanded={open}>
         {title}
-        <span>{open ? "⌃" : "⌄"}</span>
+        <Icon name={open ? "chevron-up" : "chevron-down"} />
       </button>
       {open && <div className="section-body">{children}</div>}
     </section>
@@ -175,7 +176,7 @@ function Axis({
             onChange(reset);
           }}
         >
-          ×
+          <Icon name="x-lg" />
         </button>
       )}
       <span>{label}</span>

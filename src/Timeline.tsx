@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import type { CaptureDoc, ImageClip, TextClip, ZoomClip } from "./types";
 import { formatTime, motionOf, uid } from "./types";
+import { Icon } from "./theme";
 
 type TimelineProps = {
   doc: CaptureDoc;
@@ -111,20 +112,20 @@ export default function Timeline({ doc, playhead, playing, onPlayhead, onToggle,
       <div className="timeline-bar">
         <div className="timeline-tools">
           <button className="tool on" title="Select" aria-label="Select" aria-pressed="true">
-            <PointerIcon />
+            <Icon name="cursor" />
           </button>
           <button title="Split at playhead" aria-label="Split at playhead" onClick={splitAtPlayhead}>
-            <ScissorsIcon />
+            <Icon name="scissors" />
           </button>
           <span className="tool-gap" aria-hidden="true" />
           <button title="Add text" aria-label="Add text" onClick={addCaption}>
-            <TextIcon />
+            <Icon name="type" />
           </button>
           <button title="Add image" aria-label="Add image" onClick={() => imageInput.current?.click()}>
-            <ImageIcon />
+            <Icon name="image" />
           </button>
           <button title="Add zoom" aria-label="Add zoom" onClick={addZoom}>
-            <ZoomIcon />
+            <Icon name="zoom-in" />
           </button>
           <input
             ref={imageInput}
@@ -140,13 +141,13 @@ export default function Timeline({ doc, playhead, playing, onPlayhead, onToggle,
         <div className="transport">
           <span>{formatTime(playhead)}</span>
           <button aria-label="Go to start" onClick={() => onPlayhead(0)}>
-            ‹
+            <Icon name="skip-start-fill" />
           </button>
           <button className="play" aria-label={playing ? "Pause" : "Play"} onClick={onToggle}>
-            {playing ? "❚❚" : "▶"}
+            <Icon name={playing ? "pause-fill" : "play-fill"} />
           </button>
           <button aria-label="Go to end" onClick={() => onPlayhead(motion.duration)}>
-            ›
+            <Icon name="skip-end-fill" />
           </button>
           <span>{formatTime(motion.duration)}</span>
         </div>
@@ -255,50 +256,4 @@ function clampClip<T extends { start: number; end: number }>(clip: T, duration: 
   const span = Math.min(clip.end - clip.start, duration);
   const start = Math.max(0, Math.min(clip.start, duration - span));
   return { ...clip, start, end: start + span };
-}
-
-function PointerIcon() {
-  return (
-    <svg viewBox="0 0 16 16" aria-hidden="true">
-      <path d="M3 2.2 12.2 8.1 7.4 8.8 5.6 13.2Z" fill="currentColor" />
-    </svg>
-  );
-}
-
-function ScissorsIcon() {
-  return (
-    <svg viewBox="0 0 16 16" aria-hidden="true">
-      <circle cx="4.2" cy="4.2" r="1.7" fill="none" stroke="currentColor" strokeWidth="1.4" />
-      <circle cx="4.2" cy="11.8" r="1.7" fill="none" stroke="currentColor" strokeWidth="1.4" />
-      <path d="M5.6 5.4 13 12.2M5.6 10.6 13 3.8" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function TextIcon() {
-  return (
-    <svg viewBox="0 0 16 16" aria-hidden="true">
-      <path d="M3.2 3.4h6.2M6.3 3.4v9.2" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-      <path d="M11.2 3.2v9.6" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function ImageIcon() {
-  return (
-    <svg viewBox="0 0 16 16" aria-hidden="true">
-      <rect x="2.2" y="3.2" width="9.2" height="9.2" rx="1.6" fill="none" stroke="currentColor" strokeWidth="1.4" />
-      <path d="M3.4 10.2 6 7.6l2 1.8 1.2-1.1 1.6 1.9" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" />
-      <path d="M12.2 4.2v3.2M10.6 5.8h3.2" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function ZoomIcon() {
-  return (
-    <svg viewBox="0 0 16 16" aria-hidden="true">
-      <circle cx="7" cy="7" r="4.2" fill="none" stroke="currentColor" strokeWidth="1.6" />
-      <path d="M10.2 10.2 13.5 13.5" stroke="currentColor" strokeWidth="1.6" />
-    </svg>
-  );
 }

@@ -7,16 +7,17 @@ import type { Annotation, CaptureDoc, CaptureStyle, Tool } from "./types";
 import { messageOf } from "./types";
 import { invoke } from "@tauri-apps/api/core";
 import WindowControls from "./chrome";
+import { Icon, ThemeToggle } from "./theme";
 
 const COLORS = ["#1c1c1e", "#0a84ff", "#ff3b30", "#ff9f0a", "#34c759", "#ffffff"];
-const TOOLS: { id: Tool; label: string; glyph: string }[] = [
-  { id: "pointer", label: "Select", glyph: "↖" },
-  { id: "rect", label: "Rectangle", glyph: "▢" },
-  { id: "ellipse", label: "Ellipse", glyph: "◯" },
-  { id: "line", label: "Line", glyph: "╱" },
-  { id: "arrow", label: "Arrow", glyph: "↗" },
-  { id: "text", label: "Text", glyph: "T" },
-  { id: "pen", label: "Draw", glyph: "✎" },
+const TOOLS: { id: Tool; label: string; icon: string }[] = [
+  { id: "pointer", label: "Select", icon: "cursor" },
+  { id: "rect", label: "Rectangle", icon: "square" },
+  { id: "ellipse", label: "Ellipse", icon: "circle" },
+  { id: "line", label: "Line", icon: "slash-lg" },
+  { id: "arrow", label: "Arrow", icon: "arrow-up-right" },
+  { id: "text", label: "Text", icon: "type" },
+  { id: "pen", label: "Draw", icon: "pencil" },
 ];
 
 type EditorProps = {
@@ -279,7 +280,7 @@ export default function Editor({ doc, onChange, onBack, onDelete, onNotice }: Ed
               }
             }}
           >
-            {confirmDelete ? "Delete" : "Trash"}
+            {confirmDelete ? "Delete" : <Icon name="trash" />}
           </button>
         </div>
         <div className="segment" role="tablist" aria-label="Editor mode">
@@ -297,18 +298,19 @@ export default function Editor({ doc, onChange, onBack, onDelete, onNotice }: Ed
           <div className="export-wrap">
             <button className="text-button" disabled={exporting} onClick={() => setMenu((value) => !value)}>
               {exporting ? "Exporting" : "Export"}
-              <span aria-hidden="true">▾</span>
+              <Icon name="chevron-down" />
             </button>
             {menu && (
               <div className="menu" role="menu">
-                <button onClick={exportStill}>PNG image</button>
-                <button onClick={exportMotion}>Motion video</button>
+                <button onClick={exportStill}><Icon name="image" />PNG image</button>
+                <button onClick={exportMotion}><Icon name="film" />Motion video</button>
               </div>
             )}
           </div>
           <button className="done" onClick={onBack}>
             Done
           </button>
+          <ThemeToggle />
           <WindowControls />
         </div>
       </header>
@@ -363,7 +365,7 @@ export default function Editor({ doc, onChange, onBack, onDelete, onNotice }: Ed
                 setCropMode(false);
               }}
             >
-              {item.glyph}
+              <Icon name={item.icon} />
             </button>
           ))}
           <span className="swatch-gap" />

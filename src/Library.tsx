@@ -6,6 +6,7 @@ import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
 import type { Captured, MonitorInfo, WindowInfo } from "./types";
 import { messageOf } from "./types";
 import WindowControls from "./chrome";
+import { Icon, ThemeToggle } from "./theme";
 
 type LibraryProps = {
   docs: { id: string; title: string; createdAt: number }[];
@@ -111,13 +112,14 @@ export default function Library({ docs, thumbs, busy, onOpen, onCapture, onDelet
     <div className="library">
       <div className="library-head">
         <div data-tauri-drag-region>
-          <h1>Screentrics</h1>
+          <h1><span className="mark" aria-hidden="true" />Screentrics</h1>
           <p>Capture, edit, and keep it.</p>
         </div>
         <div className="capture-actions">
-          <button onClick={grabArea} disabled={busy}>Area</button>
-          <button onClick={openWindows} disabled={busy}>Window</button>
-          <button className="primary" onClick={captureScreen} disabled={busy}>Screen</button>
+          <button onClick={grabArea} disabled={busy}><Icon name="crop" />Area</button>
+          <button onClick={openWindows} disabled={busy}><Icon name="window" />Window</button>
+          <button className="primary" onClick={captureScreen} disabled={busy}><Icon name="display" />Screen</button>
+          <ThemeToggle />
           <WindowControls />
         </div>
       </div>
@@ -138,7 +140,7 @@ export default function Library({ docs, thumbs, busy, onOpen, onCapture, onDelet
                 </span>
               </button>
               <button className="card-delete" aria-label={`Delete ${doc.title}`} onClick={() => onDelete(doc.id)}>
-                Trash
+                <Icon name="trash" />
               </button>
             </article>
           ))}
@@ -149,7 +151,7 @@ export default function Library({ docs, thumbs, busy, onOpen, onCapture, onDelet
           <div className="sheet" role="dialog" aria-label={picker === "screen" ? "Choose a screen" : "Choose a window"} onClick={(event) => event.stopPropagation()}>
             <header>
               <strong>{picker === "screen" ? "Choose a screen" : "Choose a window"}</strong>
-              <button onClick={() => setPicker(null)}>Close</button>
+              <button className="icon-button" aria-label="Close" onClick={() => setPicker(null)}><Icon name="x-lg" /></button>
             </header>
             <div className="sheet-list">
               {picker === "screen"

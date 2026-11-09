@@ -29,8 +29,7 @@ export function layoutOf(doc: CaptureDoc): Layout {
   const cropW = Math.max(2, doc.width * doc.crop.w);
   const cropH = Math.max(2, doc.height * doc.crop.h);
   const pad = doc.style.padding;
-  const gutter = Math.round(Math.max(cropW, cropH) * 0.4);
-  const room = Math.ceil(doc.style.shadowBlur + Math.abs(doc.style.shadowY) + gutter);
+  const room = Math.ceil(doc.style.shadowBlur + Math.abs(doc.style.shadowY) + 28);
   const card = { x: room, y: room, w: cropW + pad * 2, h: cropH + pad * 2 };
   const radii = cornerRadii(doc.style.borderStyle, doc.style.radius, cropW, cropH);
   return {
@@ -343,12 +342,16 @@ export function renderComposition(
 
   const buffer = cardBuffer(placed.w, placed.h);
   paintCard(buffer.ctx, source, sourceWidth, sourceHeight, doc, lay, placed, options);
+  ctx.save();
+  traceRound(ctx, lay.card.x, lay.card.y, lay.card.w, lay.card.h, lay.outerRadius);
+  ctx.clip();
   drawCardShadow(ctx, placed, doc, perspective);
   drawQuad(
     ctx,
     buffer.canvas,
     projectCard(placed.x, placed.y, placed.w, placed.h, frame.rotateX, frame.rotateY, frame.rotateZ, perspective),
   );
+  ctx.restore();
   return lay;
 }
 
@@ -581,6 +584,9 @@ function mix(from: Point, to: Point, t: number): Point {
 export function flattenPoint(doc: CaptureDoc, x: number, y: number) {
   const frame = frameOf(doc.style);
   const lay = layoutOf(doc);
+  if (x < lay.card.x || y < lay.card.y || x > lay.card.x + lay.card.w || y > lay.card.y + lay.card.h) {
+    return { x: -1, y: -1 };
+  }
   const placed = placedImage(lay, frame, 1);
   if (Math.abs(frame.rotateX) + Math.abs(frame.rotateY) + Math.abs(frame.rotateZ) < 0.4) {
     return mapPlacedToImage(lay, placed, x, y);
